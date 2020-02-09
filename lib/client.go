@@ -3,11 +3,18 @@ package lib
 import (
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"os"
 	"path"
 )
+
+func init()  {
+	logrus.SetOutput(os.Stderr)
+	logrus.SetLevel(logrus.DebugLevel)
+}
 
 const BASE_URL = "https://atcoder.jp"
 
@@ -85,6 +92,7 @@ func (ac *AtCoder) FetchContest(contest string) (*Contest, error) {
 		if err != nil {
 			return nil, err
 		}
+
 		task, err := ParseTaskPage(tres.Body)
 		if err != nil {
 			return nil, err
