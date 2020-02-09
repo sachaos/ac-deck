@@ -26,16 +26,12 @@ import (
 
 var cfgFile string
 
+var confName = ".atcoder.toml"
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "atcoder",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Unofficial CLI for AtCoder users",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },
@@ -57,7 +53,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.atcoder.toml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", fmt.Sprintf("config file (default is $HOME/%s)", confName))
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -77,9 +73,8 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".atcoder" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".atcoder")
+		viper.SetConfigName(confName)
 	}
 
 	viper.SetConfigType("toml")

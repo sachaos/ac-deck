@@ -17,8 +17,11 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"os"
+	"path"
 )
 
 // configCmd represents the config command
@@ -37,6 +40,17 @@ var configCmd = &cobra.Command{
 		viper.Set("username", username)
 		viper.Set("password", password)
 		viper.Set("language", language)
+
+		dir, err := homedir.Dir()
+		if err != nil {
+			return err
+		}
+
+		file, err := os.OpenFile(path.Join(dir, confName), os.O_CREATE|os.O_RDWR, 0600)
+		if err != nil {
+			return err
+		}
+		file.Close()
 
 		return viper.WriteConfig()
 	},
