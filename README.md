@@ -8,7 +8,7 @@ Unofficial CLI for AtCoder users.
 $ atcoder config
 ```
 
-**WARNING**: This software store raw authentication information on `~/.atcoder.conf`. This is not secure.
+**WARNING**: This software store raw authentication information on `~/.atcoder.toml`. This is not secure.
 Please understand this behavior, and use carefully. Please contribute if you interest to fix this behavior.
 
 # Usage
