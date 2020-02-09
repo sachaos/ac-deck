@@ -13,7 +13,7 @@ func ParseTasksPage(r io.Reader) ([]string, error) {
 		return nil, err
 	}
 
-	selector := doc.Find("tbody > tr > td.text-center > a")
+	selector := doc.Find("tbody > tr > td:first-child > a")
 	paths := make([]string, selector.Length())
 	selector.Each(func(i int, selection *goquery.Selection) {
 		attr, _ := selection.Attr("href")
