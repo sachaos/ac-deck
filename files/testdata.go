@@ -29,7 +29,7 @@ func LoadTestData(dir string) ([]*lib.Example, error) {
 	defer file.Close()
 
 	var examples []*lib.Example
-	err = yaml.NewDecoder(file).Decode(examples)
+	err = yaml.NewDecoder(file).Decode(&examples)
 	if err != nil {
 		return nil, err
 	}

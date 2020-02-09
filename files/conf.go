@@ -59,7 +59,7 @@ func WriteConf(dir string, conf *Conf) error {
 }
 
 func LoadConf(dir string) (*Conf, error) {
-	var conf *Conf
+	var conf Conf
 	confPath := path.Join(dir, CONF_NAME)
 	file, err := os.Open(confPath)
 	if err != nil {
@@ -67,10 +67,10 @@ func LoadConf(dir string) (*Conf, error) {
 	}
 	defer file.Close()
 
-	err = toml.NewDecoder(file).Decode(conf)
+	err = toml.NewDecoder(file).Decode(&conf)
 	if err != nil {
 		return nil, err
 	}
 
-	return conf, nil
+	return &conf, nil
 }
