@@ -22,6 +22,7 @@ type Environment struct {
 	Language string
 	SrcName  string
 	Cmd      string
+	Template string
 }
 
 var Environments = map[string]*Environment{
@@ -29,16 +30,19 @@ var Environments = map[string]*Environment{
 		Language: "go",
 		SrcName:  "main.go",
 		Cmd:      "go run main.go",
+		Template: "internal/go/main.go",
 	},
 	"python3": {
 		Language: "python3",
 		SrcName:  "main.py",
 		Cmd:      "python3 main.py",
+		Template: "internal/python3/main.py",
 	},
 	"python2": {
 		Language: "python2",
 		SrcName:  "main.py",
 		Cmd:      "python2 main.py",
+		Template: "internal/python2/main.py",
 	},
 }
 

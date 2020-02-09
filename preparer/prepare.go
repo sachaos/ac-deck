@@ -1,10 +1,16 @@
 package preparer
 
 import (
+	"fmt"
+	"github.com/rakyll/statik/fs"
 	"github.com/sachaos/atcoder/files"
 	"github.com/sachaos/atcoder/lib"
+	_ "github.com/sachaos/atcoder/statik"
+	"io"
+	"io/ioutil"
 	"os"
 	"path"
+	"strings"
 	"text/template"
 )
 
@@ -27,9 +33,45 @@ type TemplateData struct {
 	Task *lib.Task
 }
 
-func Prepare(contest *lib.Contest, dir string, env *files.Environment, template *template.Template) error {
+func prepareTemplate(p string) (*template.Template, error) {
+	split := strings.Split(p, "/")
+	var file io.ReadCloser
+	var err error
+	if split[0] == "internal" {
+		f, err := fs.New()
+		if err != nil {
+			return nil, err
+		}
+
+		file, err = f.Open(strings.TrimPrefix(p, "internal"))
+		if err != nil {
+			return nil, fmt.Errorf("internal not found: %w", err)
+		}
+		defer file.Close()
+	} else {
+		file, err = os.Open(p)
+		if err != nil {
+			return nil, err
+		}
+		defer file.Close()
+	}
+
+	all, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+
+	return template.New("src").Parse(string(all))
+}
+
+func Prepare(contest *lib.Contest, dir string, env *files.Environment) error {
+	template, err := prepareTemplate(env.Template)
+	if err != nil {
+		return err
+	}
+
 	dirPath := path.Join(dir, contest.ID)
-	err := createDir(dirPath)
+	err = createDir(dirPath)
 	if err != nil {
 		return err
 	}
