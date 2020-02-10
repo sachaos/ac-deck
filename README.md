@@ -2,6 +2,8 @@
 
 Unofficial CLI for AtCoder users.
 
+**WARNING**: Not tested on real time contest.
+
 # Demo
 
 ![demo](./images/demo.gif)
