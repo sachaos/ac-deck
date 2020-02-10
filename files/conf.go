@@ -23,7 +23,9 @@ type AtCoder struct {
 type Environment struct {
 	Language     string
 	SrcName      string
+	BuildCmd     string
 	Cmd          string
+	CleanCmd     string
 	Template     string
 	LanguageCode string
 }
@@ -32,7 +34,9 @@ var Environments = map[string]*Environment{
 	"go": {
 		Language:     "go",
 		SrcName:      "main.go",
-		Cmd:          "go run main.go",
+		BuildCmd:     "go build -o ./binary main.go",
+		Cmd:          "./binary",
+		CleanCmd:     "rm ./binary",
 		Template:     "internal/go/main.go",
 		LanguageCode: "3013",
 	},

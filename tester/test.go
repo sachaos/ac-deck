@@ -7,6 +7,7 @@ import (
 	"github.com/gookit/color"
 	"github.com/sachaos/atcoder/files"
 	"github.com/sachaos/atcoder/lib"
+	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -22,6 +23,36 @@ func RunTest(dir string) (bool, error) {
 	examples, err := files.LoadTestData(dir)
 	if err != nil {
 		return false, err
+	}
+
+	defer func() {
+		if conf.Environment.CleanCmd != "" {
+			logrus.Infof("running: %s", conf.Environment.CleanCmd)
+			cleanCmd := strings.Split(conf.Environment.CleanCmd, " ")
+			cmd := exec.Command(cleanCmd[0], cleanCmd[1:]...)
+			stdErr := bytes.Buffer{}
+			cmd.Dir = dir
+			cmd.Stderr = &stdErr
+			err := cmd.Run()
+			if err != nil {
+				logrus.Debugf("stderr: %s", stdErr.String())
+				fmt.Println(err)
+			}
+		}
+	}()
+
+	if conf.Environment.BuildCmd != "" {
+		logrus.Infof("running: %s", conf.Environment.BuildCmd)
+		buildCmd := strings.Split(conf.Environment.BuildCmd, " ")
+		cmd := exec.Command(buildCmd[0], buildCmd[1:]...)
+		stdErr := bytes.Buffer{}
+		cmd.Dir = dir
+		cmd.Stderr = &stdErr
+		err := cmd.Run()
+		if err != nil {
+			logrus.Debugf("stderr: %s", stdErr.String())
+			return false, fmt.Errorf("build cmd: %w", err)
+		}
 	}
 
 	cmd := strings.Split(conf.Environment.Cmd, " ")

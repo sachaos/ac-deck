@@ -17,7 +17,9 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"io/ioutil"
 	"os"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -25,8 +27,8 @@ import (
 )
 
 var cfgFile string
-
 var confName = ".atcoder.toml"
+var debugFlag bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -53,14 +55,18 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", fmt.Sprintf("config file (default is $HOME/%s)", confName))
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.PersistentFlags().BoolVar(&debugFlag, "debug",  false, "Debug mode")
 }
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
+	if debugFlag {
+		logrus.SetOutput(os.Stderr)
+		logrus.SetLevel(logrus.DebugLevel)
+	} else {
+		logrus.SetOutput(ioutil.Discard)
+	}
+
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
