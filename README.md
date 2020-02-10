@@ -2,6 +2,10 @@
 
 Unofficial CLI for AtCoder users.
 
+# Demo
+
+![demo](./images/demo.gif)
+
 # Install
 
 ## Download binary
