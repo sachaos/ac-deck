@@ -65,8 +65,10 @@ func runTest(index int, args []string, dir string, c *lib.Example) (bool, error)
 		return false, err
 	}
 
+	outputStr := strings.TrimSpace(string(output))
+
 	fmt.Printf("Case %d: ", index)
-	passed := string(output) == c.Exp
+	passed := outputStr == c.Exp
 	if passed {
 		color.Green.Printf("OK\n")
 	} else {
@@ -77,7 +79,7 @@ func runTest(index int, args []string, dir string, c *lib.Example) (bool, error)
 		fmt.Printf("  Expected:\n")
 		fmt.Printf("    \"%s\"\n", c.Exp)
 		fmt.Printf("  Actually:\n")
-		fmt.Printf("    \"%s\"\n", string(output))
+		fmt.Printf("    \"%s\"\n", outputStr)
 	}
 
 	errOutput, err := ioutil.ReadAll(stderr)
