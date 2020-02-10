@@ -83,6 +83,8 @@ func Prepare(contest *lib.Contest, dir string, env *files.Environment) error {
 			return err
 		}
 
+		fmt.Printf("Generating testdata & source on %s\n", taskDir)
+
 		err = files.WriteTestData(taskDir, task.Examples)
 		if err != nil {
 			return err

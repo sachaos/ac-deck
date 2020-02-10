@@ -43,6 +43,8 @@ var prepareCmd = &cobra.Command{
 			return fmt.Errorf("invalid language")
 		}
 
+		fmt.Printf("Using template of %s\n", language)
+
 		ac, err := lib.NewAtCoder()
 		if err != nil {
 			return err

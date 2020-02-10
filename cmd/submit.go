@@ -47,6 +47,8 @@ var submitCmd = &cobra.Command{
 				return err
 			}
 
+			fmt.Println()
+
 			if !allPassed {
 				fmt.Printf("Submit was canceled because test failed. Please use --skip-test if you want to submit anyway.")
 				return nil
@@ -79,6 +81,8 @@ var submitCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
+
+		fmt.Println("Submit success!")
 
 		return nil
 	},
