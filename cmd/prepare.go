@@ -16,6 +16,7 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
 	"github.com/sachaos/atcoder/files"
 	"github.com/sachaos/atcoder/lib"
 	"github.com/sachaos/atcoder/preparer"
@@ -25,14 +26,22 @@ import (
 
 // prepareCmd represents the prepare command
 var prepareCmd = &cobra.Command{
-	Use:   "prepare",
-	Short: "prepare CONTEST",
+	Use:   "prepare CONTEST_ID",
+	Short: "prepare for contest by fetching examples and generate source code from template",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		username := viper.GetString("username")
 		password := viper.GetString("password")
 		language := viper.GetString("language")
 
+		if len(args) != 1 {
+			return fmt.Errorf("please specify contest id")
+		}
 		contestId := args[0]
+
+		if !validateLanguage(language) {
+			fmt.Println("Please specify supported language. Refer `atcoder languages`.")
+			return fmt.Errorf("invalid language")
+		}
 
 		ac, err := lib.NewAtCoder()
 		if err != nil {

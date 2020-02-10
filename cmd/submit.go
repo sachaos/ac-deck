@@ -30,11 +30,15 @@ var skipTest bool
 
 // submitCmd represents the submit command
 var submitCmd = &cobra.Command{
-	Use:   "submit",
+	Use:   "submit DIRECTORY",
 	Short: "Submit to AtCoder",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		username := viper.GetString("username")
 		password := viper.GetString("password")
+
+		if len(args) != 1 {
+			return fmt.Errorf("please specify directory path")
+		}
 		dir := args[0]
 
 		if !skipTest {

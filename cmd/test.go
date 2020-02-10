@@ -16,16 +16,21 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
 	"github.com/sachaos/atcoder/tester"
 	"github.com/spf13/cobra"
 )
 
 // testCmd represents the test command
 var testCmd = &cobra.Command{
-	Use:   "test",
+	Use:   "test DIRECTORY",
 	Short: "Run test",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) != 1 {
+			return fmt.Errorf("please specify directory path")
+		}
 		dir := args[0]
+
 		_, err := tester.RunTest(dir)
 		if err != nil {
 			return err

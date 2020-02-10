@@ -41,6 +41,11 @@ var configCmd = &cobra.Command{
 		viper.Set("password", password)
 		viper.Set("language", language)
 
+		if !validateLanguage(language) {
+			fmt.Println("Please specify supported language. Refer `atcoder languages`.")
+			return fmt.Errorf("invalid language")
+		}
+
 		dir, err := homedir.Dir()
 		if err != nil {
 			return err
