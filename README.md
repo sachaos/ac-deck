@@ -48,7 +48,7 @@ $ atcoder prepare abc153
 ### Specify language to solve
 
 ```shell
-$ atcoder prepare --language python abc153
+$ atcoder prepare --language python3 abc153
 ```
 
 ## Test
