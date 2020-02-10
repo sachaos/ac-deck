@@ -13,31 +13,35 @@ import (
 	"strings"
 )
 
-func RunTest(dir string) error {
+func RunTest(dir string) (bool, error) {
 	conf, err := files.LoadConf(dir)
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	examples, err := files.LoadTestData(dir)
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	cmd := strings.Split(conf.Environment.Cmd, " ")
 
+	allPassed := true
 	for i, example := range examples {
-		err := runTest(i, cmd, dir, example)
+		passed, err := runTest(i, cmd, dir, example)
 		if err != nil {
-			return err
+			return false, err
+		}
+		if passed == false {
+			allPassed = false
 		}
 	}
 
-	return nil
+	return allPassed, nil
 }
 
 // TODO: refactoring
-func runTest(index int, args []string, dir string, c *lib.Example) error {
+func runTest(index int, args []string, dir string, c *lib.Example) (bool, error) {
 	out := new(bytes.Buffer)
 	stderr := new(bytes.Buffer)
 	cmd := exec.CommandContext(context.Background(), args[0], args[1:]...)
@@ -50,19 +54,20 @@ func runTest(index int, args []string, dir string, c *lib.Example) error {
 	if err != nil {
 		errOutput, err := ioutil.ReadAll(stderr)
 		if err != nil {
-			return err
+			return false, err
 		}
 		os.Stderr.Write(errOutput)
-		return err
+		return false, err
 	}
 
 	output, err := ioutil.ReadAll(out)
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	fmt.Printf("Case %d: ", index)
-	if string(output) == c.Exp {
+	passed := string(output) == c.Exp
+	if passed {
 		color.Green.Printf("OK\n")
 	} else {
 		color.Red.Printf("NG\n")
@@ -77,12 +82,12 @@ func runTest(index int, args []string, dir string, c *lib.Example) error {
 
 	errOutput, err := ioutil.ReadAll(stderr)
 	if err != nil {
-		return err
+		return false, err
 	}
 	if len(errOutput) != 0 {
 		fmt.Printf("Log:\n")
 		os.Stderr.Write(errOutput)
 	}
 
-	return nil
+	return passed, nil
 }

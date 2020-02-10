@@ -24,9 +24,14 @@ import (
 var testCmd = &cobra.Command{
 	Use:   "test",
 	Short: "Run test",
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		dir := args[0]
-		tester.RunTest(dir)
+		_, err := tester.RunTest(dir)
+		if err != nil {
+			return err
+		}
+
+		return nil
 	},
 }
 

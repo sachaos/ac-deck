@@ -16,13 +16,17 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
 	"github.com/sachaos/atcoder/files"
 	"github.com/sachaos/atcoder/lib"
+	"github.com/sachaos/atcoder/tester"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
 	"path"
 )
+
+var skipTest bool
 
 // submitCmd represents the submit command
 var submitCmd = &cobra.Command{
@@ -31,8 +35,20 @@ var submitCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		username := viper.GetString("username")
 		password := viper.GetString("password")
-
 		dir := args[0]
+
+		if !skipTest {
+			allPassed, err := tester.RunTest(dir)
+			if err != nil {
+				return err
+			}
+
+			if !allPassed {
+				fmt.Printf("Submit was canceled because test failed. Please use --skip-test if you want to submit anyway.")
+				return nil
+			}
+		}
+
 		ac, err := lib.NewAtCoder()
 		if err != nil {
 			return err
@@ -66,6 +82,7 @@ var submitCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(submitCmd)
+	submitCmd.Flags().BoolVarP(&skipTest, "skip-test", "s", false, "skip test")
 
 	// Here you will define your flags and configuration settings.
 

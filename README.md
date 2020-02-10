@@ -31,14 +31,14 @@ $ atcoder prepare --language python abc153
 $ atcoder test abc153/abc153_a
 ```
 
-### Submit if example passed (not implemented yet)
-
-```shell
-$ atcoder test --submit abc153/abc153_a
-```
-
-## Submit (not implemented yet)
+## Submit if test passed
 
 ```shell
 $ atcoder submit abc153/abc153_a
+```
+
+### Submit without test
+
+```shell
+$ atcoder submit abc153/abc153_a --skip-test
 ```
