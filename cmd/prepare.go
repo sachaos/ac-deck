@@ -55,6 +55,8 @@ var prepareCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(prepareCmd)
+	prepareCmd.Flags().StringP("language", "l", "", "language")
+	viper.BindPFlag("language", prepareCmd.Flags().Lookup("language"))
 
 	// Here you will define your flags and configuration settings.
 
