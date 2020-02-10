@@ -2,6 +2,32 @@
 
 Unofficial CLI for AtCoder users.
 
+# Install
+
+## Download binary
+
+### Linux
+
+```shell
+$ sudo curl -L -o /usr/local/bin/atcoder https://github.com/sachaos/atcoder/releases/download/v0.1.0/atcoder_linux_amd64 && sudo chmod +x /usr/local/bin/atcoder
+```
+
+### Mac OS X
+
+```shell
+$ sudo curl -L -o /usr/local/bin/atcoder https://github.com/sachaos/atcoder/releases/download/v0.1.0/atcoder_darwin_amd64 && sudo chmod +x /usr/local/bin/atcoder
+```
+
+## Build it yourself
+
+You need go 1.13.
+
+```shell
+$ git clone https://github.com/sachaos/atcoder.git
+$ cd atcoder
+$ make install
+```
+
 # Setup
 
 ```shell
