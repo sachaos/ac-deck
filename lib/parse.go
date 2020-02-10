@@ -64,3 +64,18 @@ func ParseTaskPage(r io.Reader) (*Task, error) {
 		Examples: examples,
 	}, nil
 }
+
+func ParseCSRFToken(r io.Reader) (string, error) {
+	doc, err := goquery.NewDocumentFromReader(r)
+	if err != nil {
+		return "", err
+	}
+
+	tokenEl := doc.Find("input[name=csrf_token]")
+	token, exists := tokenEl.Attr("value")
+	if !exists {
+		return "", fmt.Errorf("value not found")
+	}
+
+	return token, nil
+}

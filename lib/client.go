@@ -2,8 +2,9 @@ package lib
 
 import (
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
 	"github.com/sirupsen/logrus"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -36,42 +37,29 @@ func NewAtCoderWithClient(client *http.Client) *AtCoder {
 }
 
 func (ac *AtCoder) Login(name, password string) error {
-	token, err := ac.getCSRFToken()
+	get, err := ac.client.Get(BASE_URL + "/login")
+	if err != nil {
+		return err
+	}
+	defer get.Body.Close()
+
+	token, err := ParseCSRFToken(get.Body)
 	if err != nil {
 		return err
 	}
 
 	values := url.Values{}
 	values.Set("csrf_token", token)
-	values.Add("username", name)
-	values.Add("password", password)
+	values.Set("username", name)
+	values.Set("password", password)
 
-	_, err = ac.client.Post(BASE_URL+"/login?"+values.Encode(), "", nil)
+	post, err := ac.client.Post(BASE_URL+"/login?"+values.Encode(), "", nil)
 	if err != nil {
 		return err
 	}
+	defer post.Body.Close()
 
 	return nil
-}
-
-func (ac *AtCoder) getCSRFToken() (string, error) {
-	get, err := ac.client.Get(BASE_URL+"/login")
-	if err != nil {
-		return "", err
-	}
-
-	doc, err := goquery.NewDocumentFromReader(get.Body)
-	if err != nil {
-		return "", err
-	}
-
-	tokenEl := doc.Find("#main-container > div.row > div > form > input[name=csrf_token]")
-	token, exists := tokenEl.Attr("value")
-	if !exists {
-		return "", fmt.Errorf("value not found")
-	}
-
-	return token, nil
 }
 
 func (ac *AtCoder) FetchContest(contest string) (*Contest, error) {
@@ -80,6 +68,7 @@ func (ac *AtCoder) FetchContest(contest string) (*Contest, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 
 	paths, err := ParseTasksPage(res.Body)
 	if err != nil {
@@ -92,6 +81,7 @@ func (ac *AtCoder) FetchContest(contest string) (*Contest, error) {
 		if err != nil {
 			return nil, err
 		}
+		defer tres.Body.Close()
 
 		task, err := ParseTaskPage(tres.Body)
 		if err != nil {
@@ -106,4 +96,41 @@ func (ac *AtCoder) FetchContest(contest string) (*Contest, error) {
 		URL:   contestURL,
 		Tasks: tasks,
 	}, nil
+}
+
+func (ac *AtCoder) Submit(contestId, taskId, languageId string, code io.Reader) error {
+	submitUrl := BASE_URL + "/contests/" + contestId + "/submit"
+	get, err := ac.client.Get(submitUrl)
+	if err != nil {
+		return err
+	}
+	defer get.Body.Close()
+
+	token, err := ParseCSRFToken(get.Body)
+	if err != nil {
+		return err
+	}
+
+	all, err := ioutil.ReadAll(code)
+	if err != nil {
+		return err
+	}
+
+	values := url.Values{}
+	values.Set("data.TaskScreenName", taskId)
+	values.Set("csrf_token", token)
+	values.Set("data.LanguageId", languageId)
+	values.Set("sourceCode", string(all))
+
+	post, err := ac.client.Post(submitUrl+"?"+values.Encode(), "", nil)
+	if err != nil {
+		return err
+	}
+	defer post.Body.Close()
+
+	if post.StatusCode != 200 {
+		return fmt.Errorf("sumit failed")
+	}
+
+	return nil
 }

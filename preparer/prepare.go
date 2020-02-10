@@ -97,7 +97,9 @@ func Prepare(contest *lib.Contest, dir string, env *files.Environment) error {
 		err = files.WriteConf(taskDir, &files.Conf{
 			Environment: env,
 			AtCoder: &files.AtCoder{
+				TaskID:     task.ID,
 				TaskName:   task.Name,
+				ContestID:  contest.ID,
 				ContestURL: contest.URL,
 			},
 		})

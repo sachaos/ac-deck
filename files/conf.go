@@ -10,39 +10,45 @@ const CONF_NAME = ".task.toml"
 
 type Conf struct {
 	Environment *Environment
-	AtCoder *AtCoder
+	AtCoder     *AtCoder
 }
 
 type AtCoder struct {
+	TaskID     string
 	TaskName   string
+	ContestID  string
 	ContestURL string
 }
 
 type Environment struct {
-	Language string
-	SrcName  string
-	Cmd      string
-	Template string
+	Language     string
+	SrcName      string
+	Cmd          string
+	Template     string
+	LanguageCode string
 }
 
 var Environments = map[string]*Environment{
 	"go": {
-		Language: "go",
-		SrcName:  "main.go",
-		Cmd:      "go run main.go",
-		Template: "internal/go/main.go",
+		Language:     "go",
+		SrcName:      "main.go",
+		Cmd:          "go run main.go",
+		Template:     "internal/go/main.go",
+		LanguageCode: "3013",
 	},
 	"python3": {
-		Language: "python3",
-		SrcName:  "main.py",
-		Cmd:      "python3 main.py",
-		Template: "internal/python3/main.py",
+		Language:     "python3",
+		SrcName:      "main.py",
+		Cmd:          "python3 main.py",
+		Template:     "internal/python3/main.py",
+		LanguageCode: "3023",
 	},
 	"python2": {
-		Language: "python2",
-		SrcName:  "main.py",
-		Cmd:      "python2 main.py",
-		Template: "internal/python2/main.py",
+		Language:     "python2",
+		SrcName:      "main.py",
+		Cmd:          "python2 main.py",
+		Template:     "internal/python2/main.py",
+		LanguageCode: "3022",
 	},
 }
 
