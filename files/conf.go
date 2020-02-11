@@ -16,6 +16,7 @@ type Conf struct {
 type AtCoder struct {
 	TaskID     string
 	TaskName   string
+	TaskURL    string
 	ContestID  string
 	ContestURL string
 }

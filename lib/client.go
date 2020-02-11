@@ -77,7 +77,8 @@ func (ac *AtCoder) FetchContest(contest string) (*Contest, error) {
 
 	tasks := make([]*Task, len(paths))
 	for i, p := range paths {
-		tres, err := ac.client.Get(BASE_URL + p)
+		taskURL := BASE_URL + p
+		tres, err := ac.client.Get(taskURL)
 		if err != nil {
 			return nil, err
 		}
@@ -88,6 +89,7 @@ func (ac *AtCoder) FetchContest(contest string) (*Contest, error) {
 			return nil, err
 		}
 		task.ID = path.Base(p)
+		task.URL = taskURL
 		tasks[i] = task
 	}
 

@@ -9,6 +9,7 @@ type Contest struct {
 type Task struct {
 	ID string
 	Name string
+	URL  string
 	Examples []*Example
 }
 

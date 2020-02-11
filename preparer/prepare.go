@@ -101,6 +101,7 @@ func Prepare(contest *lib.Contest, dir string, env *files.Environment) error {
 			AtCoder: &files.AtCoder{
 				TaskID:     task.ID,
 				TaskName:   task.Name,
+				TaskURL:    task.URL,
 				ContestID:  contest.ID,
 				ContestURL: contest.URL,
 			},
