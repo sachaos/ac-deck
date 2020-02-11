@@ -31,7 +31,26 @@ type Environment struct {
 	LanguageCode string
 }
 
+// NOTE: https://language-test-201603.contest.atcoder.jp/
 var Environments = map[string]*Environment{
+	"g++": {
+		Language:     "c++",
+		SrcName:      "main.cpp",
+		BuildCmd:     "g++ -std=gnu++1y -O2 -o a.out main.cpp",
+		Cmd:          "./a.out",
+		CleanCmd:     "rm ./a.out",
+		Template:     "internal/c++/main.cpp",
+		LanguageCode: "3003",
+	},
+	"clang": {
+		Language:     "c++",
+		SrcName:      "main.cpp",
+		BuildCmd:     "clang++ -I/usr/local/include/c++/v1 -L/usr/local/lib -std=c++14 -stdlib=libc++ -O2 -o a.out main.cpp",
+		Cmd:          "./a.out",
+		CleanCmd:     "rm ./a.out",
+		Template:     "internal/c++/main.cpp",
+		LanguageCode: "3003",
+	},
 	"go": {
 		Language:     "go",
 		SrcName:      "main.go",
