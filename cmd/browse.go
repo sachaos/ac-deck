@@ -26,6 +26,7 @@ import (
 var browseCmd = &cobra.Command{
 	Use:   "browse DIRECTORY",
 	Short: "browse AtCoder task page",
+	Aliases: []string{"b"},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) != 1 {
 			return fmt.Errorf("please specify directory path")

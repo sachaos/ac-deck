@@ -32,6 +32,7 @@ var skipTest bool
 var submitCmd = &cobra.Command{
 	Use:   "submit DIRECTORY",
 	Short: "Submit to AtCoder",
+	Aliases: []string{"s"},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		username := viper.GetString("username")
 		password := viper.GetString("password")

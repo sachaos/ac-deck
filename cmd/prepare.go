@@ -28,6 +28,7 @@ import (
 var prepareCmd = &cobra.Command{
 	Use:   "prepare CONTEST_ID",
 	Short: "prepare for contest by fetching examples and generate source code from template",
+	Aliases: []string{"p"},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		username := viper.GetString("username")
 		password := viper.GetString("password")
