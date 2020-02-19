@@ -27,6 +27,7 @@ import (
 )
 
 var skipTest bool
+var noDocker bool
 
 // submitCmd represents the submit command
 var submitCmd = &cobra.Command{
@@ -43,7 +44,7 @@ var submitCmd = &cobra.Command{
 		dir := args[0]
 
 		if !skipTest {
-			allPassed, err := tester.RunTest(dir)
+			allPassed, err := tester.RunTest(dir, !noDocker)
 			if err != nil {
 				return err
 			}
@@ -92,6 +93,7 @@ var submitCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(submitCmd)
 	submitCmd.Flags().BoolVarP(&skipTest, "skip-test", "s", false, "skip test")
+	submitCmd.Flags().BoolVar(&noDocker, "no-docker", false, "no docker")
 
 	// Here you will define your flags and configuration settings.
 

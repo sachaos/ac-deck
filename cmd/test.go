@@ -32,7 +32,7 @@ var testCmd = &cobra.Command{
 		}
 		dir := args[0]
 
-		_, err := tester.RunTest(dir)
+		_, err := tester.RunTest(dir, !noDocker)
 		if err != nil {
 			return err
 		}
@@ -43,6 +43,7 @@ var testCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(testCmd)
+	testCmd.Flags().BoolVar(&noDocker, "no-docker", false, "no docker")
 
 	// Here you will define your flags and configuration settings.
 

@@ -4,17 +4,24 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/docker/docker/client"
 	"github.com/gookit/color"
 	"github.com/sachaos/atcoder/files"
 	"github.com/sachaos/atcoder/lib"
 	"github.com/sirupsen/logrus"
+	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
 )
 
-func RunTest(dir string) (bool, error) {
+type Result struct {
+	Actual io.ReadWriter
+	Log    io.ReadWriter
+}
+
+func RunTest(dir string, onContainer bool) (bool, error) {
 	conf, err := files.LoadConf(dir)
 	if err != nil {
 		return false, err
@@ -25,6 +32,90 @@ func RunTest(dir string) (bool, error) {
 		return false, err
 	}
 
+	results := make([]*Result, len(examples))
+
+	err = test(dir, conf, examples, results, onContainer)
+	if err != nil {
+		return false, err
+	}
+
+	all := true
+	for i := range results {
+		ok, err := judgeResult(i, examples[i], results[i])
+		if err != nil {
+			return false, err
+		}
+
+		if !ok {
+			all = false
+		}
+	}
+
+	return all, nil
+}
+
+// test attempt container mode first, and fallback to native mode
+func test(dir string, conf *files.Conf, examples []*lib.Example, results []*Result, onContainer bool) error {
+	for i := range results {
+		results[i] = &Result{
+			Actual: &bytes.Buffer{},
+			Log:    &bytes.Buffer{},
+		}
+	}
+
+	cli, err := client.NewEnvClient()
+	logrus.Infof("onContainer: %s", onContainer)
+	if err == nil && onContainer {
+		fmt.Println("Running test in container mode")
+		defer cli.Close()
+		err := testOnContainer(cli, dir, conf, examples, results)
+		if err == nil {
+			return nil
+		}
+
+		fmt.Printf("Failed to run in container mode: %s\n", err)
+	}
+
+	fmt.Println("Running test in native mode")
+	return testOnNative(dir, conf, examples, results)
+}
+
+func judgeResult(index int, example *lib.Example, result *Result) (bool, error) {
+	actual, err := ioutil.ReadAll(result.Actual)
+	if err != nil {
+		return false, err
+	}
+
+	actualStr := strings.TrimSpace(string(actual))
+
+	fmt.Printf("Case %d: ", index)
+	passed := actualStr == example.Exp
+	if passed {
+		color.Green.Printf("AC\n")
+	} else {
+		color.Red.Printf("WA\n")
+		fmt.Printf("  Input:\n")
+		fmt.Printf("    ")
+		fmt.Println(example.In)
+		fmt.Printf("  Expected:\n")
+		fmt.Printf("    \"%s\"\n", example.Exp)
+		fmt.Printf("  Actually:\n")
+		fmt.Printf("    \"%s\"\n", actualStr)
+	}
+
+	errOutput, err := ioutil.ReadAll(result.Log)
+	if err != nil {
+		return false, err
+	}
+	if len(errOutput) != 0 {
+		fmt.Printf("Log:\n")
+		os.Stderr.Write(errOutput)
+	}
+
+	return true, nil
+}
+
+func testOnNative(dir string, conf *files.Conf, examples []*lib.Example, results []*Result) error {
 	defer func() {
 		if conf.Environment.CleanCmd != "" {
 			logrus.Infof("running: %s", conf.Environment.CleanCmd)
@@ -51,76 +142,38 @@ func RunTest(dir string) (bool, error) {
 		err := cmd.Run()
 		if err != nil {
 			logrus.Debugf("stderr: %s", stdErr.String())
-			return false, fmt.Errorf("build cmd: %w", err)
+			return fmt.Errorf("build cmd: %w", err)
 		}
 	}
 
 	cmd := strings.Split(conf.Environment.Cmd, " ")
 
-	allPassed := true
-	for i, example := range examples {
-		passed, err := runTest(i, cmd, dir, example)
+	for i := range examples {
+		err := runTestOnNative(i, cmd, dir, examples[i], results[i])
 		if err != nil {
-			return false, err
-		}
-		if passed == false {
-			allPassed = false
+			return err
 		}
 	}
 
-	return allPassed, nil
+	return nil
 }
 
-// TODO: refactoring
-func runTest(index int, args []string, dir string, c *lib.Example) (bool, error) {
-	out := new(bytes.Buffer)
-	stderr := new(bytes.Buffer)
+func runTestOnNative(index int, args []string, dir string, c *lib.Example, r *Result) error {
 	cmd := exec.CommandContext(context.Background(), args[0], args[1:]...)
 	cmd.Dir = dir
 	cmd.Stdin = strings.NewReader(c.In)
-	cmd.Stdout = out
-	cmd.Stderr = stderr
+	cmd.Stdout = r.Actual
+	cmd.Stderr = r.Log
 
 	err := cmd.Run()
 	if err != nil {
-		errOutput, err := ioutil.ReadAll(stderr)
+		errOutput, err := ioutil.ReadAll(r.Log)
 		if err != nil {
-			return false, err
+			return err
 		}
 		os.Stderr.Write(errOutput)
-		return false, err
+		return err
 	}
 
-	output, err := ioutil.ReadAll(out)
-	if err != nil {
-		return false, err
-	}
-
-	outputStr := strings.TrimSpace(string(output))
-
-	fmt.Printf("Case %d: ", index)
-	passed := outputStr == c.Exp
-	if passed {
-		color.Green.Printf("OK\n")
-	} else {
-		color.Red.Printf("NG\n")
-		fmt.Printf("  Input:\n")
-		fmt.Printf("    ")
-		fmt.Println(c.In)
-		fmt.Printf("  Expected:\n")
-		fmt.Printf("    \"%s\"\n", c.Exp)
-		fmt.Printf("  Actually:\n")
-		fmt.Printf("    \"%s\"\n", outputStr)
-	}
-
-	errOutput, err := ioutil.ReadAll(stderr)
-	if err != nil {
-		return false, err
-	}
-	if len(errOutput) != 0 {
-		fmt.Printf("Log:\n")
-		os.Stderr.Write(errOutput)
-	}
-
-	return passed, nil
+	return nil
 }

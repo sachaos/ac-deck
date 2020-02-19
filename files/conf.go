@@ -22,31 +22,38 @@ type AtCoder struct {
 }
 
 type Environment struct {
-	Language     string
-	SrcName      string
-	BuildCmd     string
-	Cmd          string
-	CleanCmd     string
-	Template     string
-	LanguageCode string
+	Language         string
+	SrcName          string
+	BuildCmd         string
+	Cmd              string
+	CmdOnDocker      string
+	CleanCmd         string
+	Template         string
+	LanguageCode     string
+	DockerImage      string
+	BuildCmdOnDocker string
 }
 
 // NOTE: https://language-test-201603.contest.atcoder.jp/
 var Environments = map[string]*Environment{
 	"g++": {
-		Language:     "c++",
-		SrcName:      "main.cpp",
-		BuildCmd:     "g++ -std=gnu++1y -O2 -o a.out main.cpp",
-		Cmd:          "./a.out",
-		CleanCmd:     "rm ./a.out",
-		Template:     "internal/c++/main.cpp",
-		LanguageCode: "3003",
+		Language:         "c++",
+		SrcName:          "main.cpp",
+		BuildCmd:         "g++ -std=gnu++1y -O2 -o a.out main.cpp",
+		Cmd:              "./a.out",
+		CmdOnDocker:      "./a.out",
+		CleanCmd:         "rm ./a.out",
+		Template:         "internal/c++/main.cpp",
+		LanguageCode:     "3003",
+		DockerImage:      "docker.io/library/golang:1.6",
+		BuildCmdOnDocker: "go build -o a.out main.go",
 	},
 	"clang": {
 		Language:     "c++",
 		SrcName:      "main.cpp",
 		BuildCmd:     "clang++ -I/usr/local/include/c++/v1 -L/usr/local/lib -std=c++14 -stdlib=libc++ -O2 -o a.out main.cpp",
 		Cmd:          "./a.out",
+		CmdOnDocker:  "./a.out",
 		CleanCmd:     "rm ./a.out",
 		Template:     "internal/c++/main.cpp",
 		LanguageCode: "3003",
@@ -56,6 +63,7 @@ var Environments = map[string]*Environment{
 		SrcName:      "main.go",
 		BuildCmd:     "go build -o ./binary main.go",
 		Cmd:          "./binary",
+		CmdOnDocker:  "./binary",
 		CleanCmd:     "rm ./binary",
 		Template:     "internal/go/main.go",
 		LanguageCode: "3013",
@@ -64,14 +72,18 @@ var Environments = map[string]*Environment{
 		Language:     "python3",
 		SrcName:      "main.py",
 		Cmd:          "python3 main.py",
+		CmdOnDocker:  "python3 main.py",
 		Template:     "internal/python3/main.py",
+		DockerImage:  "docker.io/library/python:3.4.3",
 		LanguageCode: "3023",
 	},
 	"python2": {
 		Language:     "python2",
 		SrcName:      "main.py",
 		Cmd:          "python2 main.py",
+		CmdOnDocker:  "python2 main.py",
 		Template:     "internal/python2/main.py",
+		DockerImage:  "docker.io/library/python:2.7.6",
 		LanguageCode: "3022",
 	},
 }
