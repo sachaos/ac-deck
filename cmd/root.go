@@ -42,13 +42,39 @@ var rootCmd = &cobra.Command{
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	// TODO: if subcommand passed, treat as first argument.
-	args := append([]string{os.Args[2], os.Args[1]}, os.Args[3:]...)
-	rootCmd.SetArgs(args)
+	i := indexOfSubCommand(rootCmd, os.Args)
+	args := os.Args
 
+	if i >= 0 {
+		subCmd := args[i]
+		args = append(args[:i], args[i+1:]...)
+		args = append(args, "")
+		copy(args[2:], args[1:])
+		args[1] = subCmd
+	}
+
+	rootCmd.SetArgs(args[1:])
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
+}
+
+func indexOfSubCommand(cmd *cobra.Command, args []string) int {
+	for i, arg := range args {
+		for _, subCmd := range cmd.Commands() {
+			if arg == subCmd.Name() {
+				return i
+			}
+
+			for _, alias := range subCmd.Aliases {
+				if arg == alias {
+					return i
+				}
+			}
+		}
+	}
+
+	return -1
 }
 
 func init() {

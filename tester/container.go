@@ -82,7 +82,7 @@ func testOnContainer(cli *client.Client, dir string, conf *files.Conf, examples 
 	}
 
 	for i := range examples {
-		ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+		ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 		r, err := ExecWithStdin(ctx, cli, containerId, strings.Split(conf.Environment.Cmd, " "), examples[i].In)
 		if err != nil {
 			return err
