@@ -9,7 +9,6 @@ import (
 	"os"
 	"path"
 	"strings"
-	"time"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
@@ -22,14 +21,67 @@ import (
 	"github.com/sachaos/atcoder/lib"
 )
 
-func testOnContainer(cli *client.Client, dir string, conf *files.Conf, examples []*lib.Example, results []*Result) error {
+type ContainerTester struct {
+	cli         *client.Client
+	conf        *files.Conf
+	dir         string
+	containerId string
+}
+
+func NewContainerTester(ctx context.Context, cli *client.Client, conf *files.Conf, dir string) (*ContainerTester, error) {
+	containerId, err := startContainer(ctx, cli, conf, dir)
+	if err != nil {
+		return nil, err
+	}
+
+	if conf.Environment.BuildCmdOnDocker != "" {
+		result, err := Exec(ctx, cli, containerId, strings.Split(conf.Environment.BuildCmdOnDocker, " "))
+		if err != nil {
+			return nil, err
+		}
+
+		if result.ExitCode != 0 {
+			fmt.Println(result.Stdout)
+			fmt.Println(result.Stderr)
+			return nil, fmt.Errorf("exit %d", result.ExitCode)
+		}
+	}
+
+	return &ContainerTester{
+		cli:         cli,
+		conf:        conf,
+		dir:         dir,
+		containerId: containerId,
+	}, nil
+}
+
+func (t *ContainerTester) Run(ctx context.Context, index int, example *lib.Example) (*Result, error) {
+	var result Result
+	r, err := ExecWithStdin(ctx, t.cli, t.containerId, strings.Split(t.conf.Environment.Cmd, " "), example.In)
+	if err != nil {
+		return nil, err
+	}
+
+	result.Actual = bytes.NewBufferString(r.Stdout)
+	result.Log = bytes.NewBufferString(r.Stderr)
+
+	return &result, nil
+}
+
+func (t *ContainerTester) Clean(ctx context.Context) error {
+	return t.cli.ContainerRemove(ctx, t.containerId, types.ContainerRemoveOptions{
+		Force: true,
+	})
+}
+
+func startContainer(ctx context.Context, cli *client.Client, conf *files.Conf, dir string) (string, error) {
 	if conf.Environment.DockerImage == "" {
-		return fmt.Errorf("empty DockerImage")
+		return "", fmt.Errorf("empty DockerImage")
 	}
 
 	pwd, err := os.Getwd()
 	if err != nil {
-		return err
+		return "", err
 	}
 	config := &container.Config{
 		Tty:        true,
@@ -41,58 +93,25 @@ func testOnContainer(cli *client.Client, dir string, conf *files.Conf, examples 
 		Binds: []string{path.Join(pwd, dir) + ":/src"},
 	}
 	networkingConfig := &network.NetworkingConfig{}
-	pull, err := cli.ImagePull(context.Background(), conf.Environment.DockerImage, types.ImagePullOptions{})
+	pull, err := cli.ImagePull(ctx, conf.Environment.DockerImage, types.ImagePullOptions{})
 	if err != nil {
-		return err
+		return "", err
 	}
 	io.Copy(ioutil.Discard, pull)
 	defer pull.Close()
 
-	create, err := cli.ContainerCreate(context.Background(), config, hostConfig, networkingConfig, "")
+	create, err := cli.ContainerCreate(ctx, config, hostConfig, networkingConfig, "")
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	containerId := create.ID
-	err = cli.ContainerStart(context.Background(), containerId, types.ContainerStartOptions{})
+	err = cli.ContainerStart(ctx, containerId, types.ContainerStartOptions{})
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	defer func() {
-		err := cli.ContainerRemove(context.Background(), containerId, types.ContainerRemoveOptions{
-			Force:         true,
-		})
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
-	}()
-
-	if conf.Environment.BuildCmdOnDocker != "" {
-		result, err := Exec(context.Background(), cli, containerId, strings.Split(conf.Environment.BuildCmdOnDocker, " "))
-		if err != nil {
-			return err
-		}
-
-		if result.ExitCode != 0 {
-			fmt.Println(result.Stdout)
-			fmt.Println(result.Stderr)
-			return fmt.Errorf("exit %d", result.ExitCode)
-		}
-	}
-
-	for i := range examples {
-		ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
-		r, err := ExecWithStdin(ctx, cli, containerId, strings.Split(conf.Environment.Cmd, " "), examples[i].In)
-		if err != nil {
-			return err
-		}
-
-		results[i].Actual = bytes.NewBufferString(r.Stdout)
-		results[i].Log = bytes.NewBufferString(r.Stderr)
-	}
-
-	return nil
+	return containerId, nil
 }
 
 type ExecResult struct {
@@ -109,12 +128,12 @@ func Exec(ctx context.Context, cli *client.Client, name string, cmd []string) (*
 func ExecWithStdin(ctx context.Context, cli *client.Client, name string, cmd []string, stdin string) (*ExecResult, error) {
 	logrus.Infof("running: %+v", cmd)
 	execConf := types.ExecConfig{
-		Cmd: cmd,
+		Cmd:          cmd,
 		AttachStdin:  true,
 		AttachStderr: true,
 		AttachStdout: true,
-		Tty: false,
-		Detach: false,
+		Tty:          false,
+		Detach:       false,
 	}
 
 	logrus.Debug("Running ContainerExecCreate")
