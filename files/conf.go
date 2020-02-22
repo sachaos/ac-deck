@@ -53,7 +53,7 @@ var Environments = map[string]*Environment{
 		CleanCmd: "rm ./a.out",
 
 		DockerImage:      "docker.io/library/gcc:5.4.0",
-		BuildCmdOnDocker: "go build -o a.out main.go",
+		BuildCmdOnDocker: "g++ -std=gnu++1y -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 
 		Note: "Just alias for c++14_gcc",
@@ -70,7 +70,7 @@ var Environments = map[string]*Environment{
 		CleanCmd: "rm ./a.out",
 
 		DockerImage:      "docker.io/library/gcc:5.4.0",
-		BuildCmdOnDocker: "go build -o a.out main.go",
+		BuildCmdOnDocker: "g++ -std=gnu++1y -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 	},
 	"c++": { // Alias of c++_gcc
@@ -85,7 +85,7 @@ var Environments = map[string]*Environment{
 		CleanCmd: "rm ./a.out",
 
 		DockerImage:      "docker.io/library/gcc:5.4.0",
-		BuildCmdOnDocker: "go build -o a.out main.go",
+		BuildCmdOnDocker: "g++ -std=gnu++03 -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 
 		Note: "Just alias for c++_gcc",
@@ -102,7 +102,7 @@ var Environments = map[string]*Environment{
 		CleanCmd: "rm ./a.out",
 
 		DockerImage:      "docker.io/library/gcc:5.4.0",
-		BuildCmdOnDocker: "go build -o a.out main.go",
+		BuildCmdOnDocker: "g++ -std=gnu++03 -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 	},
 	"go": {
