@@ -97,23 +97,8 @@ func startContainer(ctx context.Context, cli *client.Client, conf *files.Conf, d
 		Binds: []string{path.Join(pwd, dir) + ":/src"},
 	}
 
-	_, _, err = cli.ImageInspectWithRaw(ctx, conf.Environment.DockerImage)
-	if client.IsErrNotFound(err) {
-		fmt.Printf("Image not found: %s\n", conf.Environment.DockerImage)
-		pull, err := cli.ImagePull(ctx, conf.Environment.DockerImage, types.ImagePullOptions{})
-		if err != nil {
-			return "", err
-		}
-		defer pull.Close()
-
-		fmt.Printf("Pulling image: %s\n", conf.Environment.DockerImage)
-		out := streams.NewOut(os.Stdout)
-		err = jsonmessage.DisplayJSONMessagesToStream(pull, out, nil)
-		if err != nil {
-			return "", err
-		}
-
-	} else if err != nil {
+	err = PrepareImage(cli, ctx, conf.Environment.DockerImage)
+	if err != nil {
 		return "", err
 	}
 
@@ -130,6 +115,28 @@ func startContainer(ctx context.Context, cli *client.Client, conf *files.Conf, d
 	}
 
 	return containerId, nil
+}
+
+func PrepareImage(cli *client.Client, ctx context.Context, imageName string) (error) {
+	_, _, err := cli.ImageInspectWithRaw(ctx, imageName)
+	if client.IsErrNotFound(err) {
+		fmt.Printf("Image not found: %s\n", imageName)
+		pull, err := cli.ImagePull(ctx, imageName, types.ImagePullOptions{})
+		if err != nil {
+			return err
+		}
+		defer pull.Close()
+
+		fmt.Printf("Pulling image: %s\n", imageName)
+		out := streams.NewOut(os.Stdout)
+		err = jsonmessage.DisplayJSONMessagesToStream(pull, out, nil)
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	}
+	return nil
 }
 
 type ExecResult struct {
