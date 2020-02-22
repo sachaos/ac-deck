@@ -16,7 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
 	"github.com/sachaos/atcoder/files"
 	"github.com/spf13/cobra"
 	"os"
@@ -30,10 +29,8 @@ var editCmd = &cobra.Command{
 	Use:   "edit",
 	Short: "Edit source code",
 	Aliases: []string{"e"},
+	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) != 1 {
-			return fmt.Errorf("please specify directory path")
-		}
 		dir := args[0]
 
 		conf, err := files.LoadConf(dir)
