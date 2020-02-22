@@ -31,11 +31,13 @@ var installCmd = &cobra.Command{
 	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		language := args[0]
-		environment, ok := files.Environments[language]
-		if !ok {
+
+		if !validateLanguage(language) {
 			fmt.Println("Please specify supported language. Refer `atcoder languages`.")
 			return fmt.Errorf("invalid language")
 		}
+
+		environment := files.Environments[language]
 
 		cli, err := client.NewClientWithOpts(client.FromEnv)
 		if err != nil {
