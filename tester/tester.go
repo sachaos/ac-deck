@@ -111,5 +111,5 @@ func judgeResult(index int, example *lib.Example, result *Result) (bool, error) 
 		os.Stdout.Write(errOutput)
 	}
 
-	return true, nil
+	return passed, nil
 }
