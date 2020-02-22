@@ -2,11 +2,16 @@
 
 Unofficial CLI for AtCoder users.
 
-**WARNING**: Not tested on real time contest.
-
 # Demo
 
 ![demo](./images/demo.gif)
+
+## Features
+
+* Template (built-in)
+* Run test on Docker or Native
+* Submit code to AtCoder
+* Support major languages (If you want to add another languages, please send PR.)
 
 # Install
 
@@ -15,13 +20,13 @@ Unofficial CLI for AtCoder users.
 ### Linux
 
 ```shell
-$ sudo curl -L -o /usr/local/bin/atcoder https://github.com/sachaos/atcoder/releases/download/v0.1.0/atcoder_linux_amd64 && sudo chmod +x /usr/local/bin/atcoder
+$ sudo curl -L -o /usr/local/bin/atcoder https://github.com/sachaos/atcoder/releases/download/v0.2.2/atcoder_linux_amd64 && sudo chmod +x /usr/local/bin/atcoder
 ```
 
 ### Mac OS X
 
 ```shell
-$ sudo curl -L -o /usr/local/bin/atcoder https://github.com/sachaos/atcoder/releases/download/v0.1.0/atcoder_darwin_amd64 && sudo chmod +x /usr/local/bin/atcoder
+$ sudo curl -L -o /usr/local/bin/atcoder https://github.com/sachaos/atcoder/releases/download/v0.2.2/atcoder_darwin_amd64 && sudo chmod +x /usr/local/bin/atcoder
 ```
 
 ## Build it yourself
@@ -57,20 +62,48 @@ $ atcoder prepare abc153
 $ atcoder prepare --language python3 abc153
 ```
 
+## Browse problem (on web browser)
+
+```shell
+$ atcoder abc153/abc153_a browse
+```
+
+## Edit code
+
+```shell
+$ atcoder abc153/abc153_a edit
+```
+
+You can customize the editor by `$EDITOR` environment variable.
+
 ## Test
 
 ```shell
-$ atcoder test abc153/abc153_a
+$ atcoder abc153/abc153_a test
 ```
 
 ## Submit if test passed
 
 ```shell
-$ atcoder submit abc153/abc153_a
+$ atcoder abc153/abc153_a submit
 ```
 
 ### Submit without test
 
 ```shell
-$ atcoder submit abc153/abc153_a --skip-test
+$ atcoder abc153/abc153_a submit --skip-test
 ```
+
+## Supporting Language
+
+[AtCoder Languages and Compiler options](https://language-test-201603.contest.atcoder.jp/)
+
+- C++14 (GCC 5.4.1)
+    - Using 5.4.0 docker image now.
+    - You cannot use boost now.
+- Go (1.6)
+- Python2 (2.7.6)
+    - You cannot use numpy, scipy, scikits now.
+- Python3 (3.4.3)
+    - You cannot use numpy, scipy, scikits now.
+- Ruby (2.3.3)

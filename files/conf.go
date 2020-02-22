@@ -22,69 +22,141 @@ type AtCoder struct {
 }
 
 type Environment struct {
-	Language         string
-	SrcName          string
-	BuildCmd         string
-	Cmd              string
-	CmdOnDocker      string
-	CleanCmd         string
-	Template         string
-	LanguageCode     string
+	Key          string
+	Language     string
+	SrcName      string
+	Template     string
+	LanguageCode string
+
+	BuildCmd string
+	Cmd      string
+	CleanCmd string
+
 	DockerImage      string
 	BuildCmdOnDocker string
+	CmdOnDocker      string
+
+	Note string `yaml:"-"`
 }
 
 // NOTE: https://language-test-201603.contest.atcoder.jp/
 var Environments = map[string]*Environment{
-	"g++": {
-		Language:         "c++",
-		SrcName:          "main.cpp",
-		BuildCmd:         "g++ -std=gnu++1y -O2 -o a.out main.cpp",
-		Cmd:              "./a.out",
-		CmdOnDocker:      "./a.out",
-		CleanCmd:         "rm ./a.out",
-		Template:         "internal/c++/main.cpp",
-		LanguageCode:     "3003",
-		DockerImage:      "docker.io/library/golang:1.6",
-		BuildCmdOnDocker: "go build -o a.out main.go",
-	},
-	"clang": {
-		Language:     "c++",
+	"c++14": { // Alias of c++14_gcc
+		Key:          "c++14",
+		Language:     "C++14 (GCC 5.4.1)",
 		SrcName:      "main.cpp",
-		BuildCmd:     "clang++ -I/usr/local/include/c++/v1 -L/usr/local/lib -std=c++14 -stdlib=libc++ -O2 -o a.out main.cpp",
-		Cmd:          "./a.out",
-		CmdOnDocker:  "./a.out",
-		CleanCmd:     "rm ./a.out",
 		Template:     "internal/c++/main.cpp",
 		LanguageCode: "3003",
+
+		BuildCmd: "g++ -std=gnu++1y -O2 -o a.out main.cpp",
+		Cmd:      "./a.out",
+		CleanCmd: "rm ./a.out",
+
+		DockerImage:      "docker.io/library/gcc:5.4.0",
+		BuildCmdOnDocker: "go build -o a.out main.go",
+		CmdOnDocker:      "./a.out",
+
+		Note: "Just alias for c++14_gcc",
+	},
+	"c++14_gcc": {
+		Key:          "c++14_gcc",
+		Language:     "C++14 (GCC 5.4.1)",
+		SrcName:      "main.cpp",
+		Template:     "internal/c++/main.cpp",
+		LanguageCode: "3003",
+
+		BuildCmd: "g++ -std=gnu++1y -O2 -o a.out main.cpp",
+		Cmd:      "./a.out",
+		CleanCmd: "rm ./a.out",
+
+		DockerImage:      "docker.io/library/gcc:5.4.0",
+		BuildCmdOnDocker: "go build -o a.out main.go",
+		CmdOnDocker:      "./a.out",
+	},
+	"c++": { // Alias of c++_gcc
+		Key:          "c++",
+		Language:     "C++ (GCC 5.4.1)",
+		SrcName:      "main.cpp",
+		Template:     "internal/c++/main.cpp",
+		LanguageCode: "3029",
+
+		BuildCmd: "g++ -std=gnu++03 -O2 -o a.out main.cpp",
+		Cmd:      "./a.out",
+		CleanCmd: "rm ./a.out",
+
+		DockerImage:      "docker.io/library/gcc:5.4.0",
+		BuildCmdOnDocker: "go build -o a.out main.go",
+		CmdOnDocker:      "./a.out",
+
+		Note: "Just alias for c++_gcc",
+	},
+	"c++_gcc": {
+		Key:          "c++_gcc",
+		Language:     "C++ (GCC 5.4.1)",
+		SrcName:      "main.cpp",
+		Template:     "internal/c++/main.cpp",
+		LanguageCode: "3029",
+
+		BuildCmd: "g++ -std=gnu++03 -O2 -o a.out main.cpp",
+		Cmd:      "./a.out",
+		CleanCmd: "rm ./a.out",
+
+		DockerImage:      "docker.io/library/gcc:5.4.0",
+		BuildCmdOnDocker: "go build -o a.out main.go",
+		CmdOnDocker:      "./a.out",
 	},
 	"go": {
-		Language:     "go",
+		Key:          "go",
+		Language:     "Go (1.6)",
 		SrcName:      "main.go",
-		BuildCmd:     "go build -o ./binary main.go",
-		Cmd:          "./binary",
-		CmdOnDocker:  "./binary",
-		CleanCmd:     "rm ./binary",
 		Template:     "internal/go/main.go",
 		LanguageCode: "3013",
+
+		BuildCmd: "go build -o ./a.out main.go",
+		Cmd:      "./a.out",
+		CleanCmd: "rm ./a.out",
+
+		DockerImage:      "docker.io/library/golang:1.6",
+		BuildCmdOnDocker: "go build -o a.out main.go",
+		CmdOnDocker:      "./a.out",
 	},
 	"python3": {
-		Language:     "python3",
+		Key:          "python3",
+		Language:     "Python3 (3.4.3)",
 		SrcName:      "main.py",
-		Cmd:          "python3 main.py",
-		CmdOnDocker:  "python3 main.py",
 		Template:     "internal/python3/main.py",
-		DockerImage:  "docker.io/library/python:3.4.3",
 		LanguageCode: "3023",
+
+		Cmd: "python3 -B main.py",
+
+		CmdOnDocker: "python3 -B main.py",
+		DockerImage: "docker.io/library/python:3.4.3-slim",
 	},
 	"python2": {
-		Language:     "python2",
+		Key:          "python2",
+		Language:     "Python2 (2.7.6)",
 		SrcName:      "main.py",
-		Cmd:          "python2 main.py",
-		CmdOnDocker:  "python2 main.py",
 		Template:     "internal/python2/main.py",
-		DockerImage:  "docker.io/library/python:2.7.6",
 		LanguageCode: "3022",
+
+		Cmd: "python2 -B main.py",
+
+		DockerImage: "docker.io/library/python:2.7.6-slim",
+		CmdOnDocker: "python2 -B main.py",
+	},
+	"ruby": {
+		Key:          "ruby",
+		Language:     "Ruby (2.3.3)",
+		SrcName:      "main.rb",
+		Template:     "internal/ruby/main.rb",
+		LanguageCode: "3024",
+
+		BuildCmd: "ruby --disable-gems -w -c main.rb",
+		Cmd:      "ruby --disable-gems main.rb",
+
+		DockerImage:      "docker.io/library/ruby:2.3.3-alpine",
+		CmdOnDocker:      "ruby --disable-gems -w -c main.rb",
+		BuildCmdOnDocker: "ruby --disable-gems main.rb",
 	},
 }
 
