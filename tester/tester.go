@@ -87,19 +87,19 @@ func judgeResult(index int, example *lib.Example, result *Result) (bool, error) 
 
 	actualStr := strings.TrimSpace(string(actual))
 
-	fmt.Printf("Case %d: ", index)
+	fmt.Printf("\n")
+	fmt.Printf(color.Bold.Sprintf("Case %d: ", index + 1))
 	passed := actualStr == example.Exp
 	if passed {
 		color.Green.Printf("AC\n")
 	} else {
 		color.Red.Printf("WA\n")
-		fmt.Printf("  Input:\n")
-		fmt.Printf("    ")
+		fmt.Printf("Input:\n")
 		fmt.Println(example.In)
-		fmt.Printf("  Expected:\n")
-		fmt.Printf("    \"%s\"\n", example.Exp)
-		fmt.Printf("  Actually:\n")
-		fmt.Printf("    \"%s\"\n", actualStr)
+		fmt.Printf("\nExpected:\n")
+		fmt.Println(example.Exp)
+		fmt.Printf("\nActually:\n")
+		fmt.Println(actualStr)
 	}
 
 	errOutput, err := ioutil.ReadAll(result.Log)
@@ -107,8 +107,8 @@ func judgeResult(index int, example *lib.Example, result *Result) (bool, error) 
 		return false, err
 	}
 	if len(errOutput) != 0 {
-		fmt.Printf("Log:\n")
-		os.Stderr.Write(errOutput)
+		fmt.Printf("\nLog:\n")
+		os.Stdout.Write(errOutput)
 	}
 
 	return true, nil
