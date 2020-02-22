@@ -39,6 +39,7 @@ func RunTest(dir string, onContainer bool) (bool, error) {
 	}
 
 	var tester Tester
+	logrus.Debug("preparing Docker client")
 	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil || !onContainer {
 		fmt.Println("Running test on Native mode")

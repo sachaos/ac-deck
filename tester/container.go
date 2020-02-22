@@ -92,14 +92,23 @@ func startContainer(ctx context.Context, cli *client.Client, conf *files.Conf, d
 	hostConfig := &container.HostConfig{
 		Binds: []string{path.Join(pwd, dir) + ":/src"},
 	}
-	networkingConfig := &network.NetworkingConfig{}
-	pull, err := cli.ImagePull(ctx, conf.Environment.DockerImage, types.ImagePullOptions{})
-	if err != nil {
+
+	_, _, err = cli.ImageInspectWithRaw(ctx, conf.Environment.DockerImage)
+	if client.IsErrNotFound(err) {
+		fmt.Printf("Image not found: %s\n", conf.Environment.DockerImage)
+		pull, err := cli.ImagePull(ctx, conf.Environment.DockerImage, types.ImagePullOptions{})
+		if err != nil {
+			return "", err
+		}
+		defer pull.Close()
+
+		fmt.Printf("Pulling image: %s\n", conf.Environment.DockerImage)
+		io.Copy(ioutil.Discard, pull)
+	} else if err != nil {
 		return "", err
 	}
-	io.Copy(ioutil.Discard, pull)
-	defer pull.Close()
 
+	networkingConfig := &network.NetworkingConfig{}
 	create, err := cli.ContainerCreate(ctx, config, hostConfig, networkingConfig, "")
 	if err != nil {
 		return "", err
