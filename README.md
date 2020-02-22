@@ -15,18 +15,16 @@ Unofficial CLI for AtCoder users.
 
 # Install
 
-## Download binary
-
-### Linux
+## Linux
 
 ```shell
 $ sudo curl -L -o /usr/local/bin/atcoder https://github.com/sachaos/atcoder/releases/download/v0.2.2/atcoder_linux_amd64 && sudo chmod +x /usr/local/bin/atcoder
 ```
 
-### Mac OS X
+## Mac OS X
 
 ```shell
-$ sudo curl -L -o /usr/local/bin/atcoder https://github.com/sachaos/atcoder/releases/download/v0.2.2/atcoder_darwin_amd64 && sudo chmod +x /usr/local/bin/atcoder
+$ brew install sachaos/atcoder/atcoder
 ```
 
 ## Build it yourself
@@ -41,12 +39,20 @@ $ make install
 
 # Setup
 
+## Configure authentication information
+
 ```shell
 $ atcoder config
 ```
 
 **WARNING**: This software store raw authentication information on `~/.atcoder.toml`. This is not secure.
 Please understand this behavior, and use carefully. Please contribute if you interest to fix this behavior.
+
+## Install test runnder
+
+```shell
+$ atcoder install python3
+```
 
 # Usage
 
