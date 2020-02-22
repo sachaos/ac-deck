@@ -4,16 +4,17 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"os"
 	"path"
 	"strings"
 
+	"github.com/docker/cli/cli/streams"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/client"
+	"github.com/docker/docker/pkg/jsonmessage"
 	"github.com/docker/docker/pkg/stdcopy"
 	"github.com/sirupsen/logrus"
 
@@ -29,12 +30,15 @@ type ContainerTester struct {
 }
 
 func NewContainerTester(ctx context.Context, cli *client.Client, conf *files.Conf, dir string) (*ContainerTester, error) {
+	logrus.Debug("Start container")
 	containerId, err := startContainer(ctx, cli, conf, dir)
 	if err != nil {
 		return nil, err
 	}
+	logrus.Debug("Finish start container")
 
 	if conf.Environment.BuildCmdOnDocker != "" {
+		logrus.Debug("Building binary")
 		result, err := Exec(ctx, cli, containerId, strings.Split(conf.Environment.BuildCmdOnDocker, " "))
 		if err != nil {
 			return nil, err
@@ -103,7 +107,12 @@ func startContainer(ctx context.Context, cli *client.Client, conf *files.Conf, d
 		defer pull.Close()
 
 		fmt.Printf("Pulling image: %s\n", conf.Environment.DockerImage)
-		io.Copy(ioutil.Discard, pull)
+		out := streams.NewOut(os.Stdout)
+		err = jsonmessage.DisplayJSONMessagesToStream(pull, out, nil)
+		if err != nil {
+			return "", err
+		}
+
 	} else if err != nil {
 		return "", err
 	}

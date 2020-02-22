@@ -11,6 +11,7 @@ import (
 
 	"github.com/docker/docker/client"
 	"github.com/gookit/color"
+	"github.com/sirupsen/logrus"
 
 	"github.com/sachaos/atcoder/files"
 	"github.com/sachaos/atcoder/lib"
