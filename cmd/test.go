@@ -16,7 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
 	"github.com/sachaos/atcoder/tester"
 	"github.com/spf13/cobra"
 )
@@ -25,13 +24,12 @@ import (
 var testCmd = &cobra.Command{
 	Use:   "test DIRECTORY",
 	Short: "Run test",
+	Aliases: []string{"t"},
+	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) != 1 {
-			return fmt.Errorf("please specify directory path")
-		}
 		dir := args[0]
 
-		_, err := tester.RunTest(dir)
+		_, err := tester.RunTest(dir, !noDocker)
 		if err != nil {
 			return err
 		}
@@ -42,6 +40,7 @@ var testCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(testCmd)
+	testCmd.Flags().BoolVar(&noDocker, "no-docker", false, "no docker")
 
 	// Here you will define your flags and configuration settings.
 

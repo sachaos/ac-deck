@@ -16,16 +16,19 @@ limitations under the License.
 package cmd
 
 import (
-	"github.com/pkg/browser"
 	"github.com/sachaos/atcoder/files"
 	"github.com/spf13/cobra"
+	"os"
+	"os/exec"
+	"path"
+	"strings"
 )
 
-// browseCmd represents the browse command
-var browseCmd = &cobra.Command{
-	Use:   "browse",
-	Short: "browse AtCoder task page",
-	Aliases: []string{"b"},
+// editCmd represents the edit command
+var editCmd = &cobra.Command{
+	Use:   "edit",
+	Short: "Edit source code",
+	Aliases: []string{"e"},
 	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		dir := args[0]
@@ -35,20 +38,41 @@ var browseCmd = &cobra.Command{
 			return err
 		}
 
-		return browser.OpenURL(conf.AtCoder.TaskURL)
+		filePath := path.Join(dir, conf.Environment.SrcName)
+
+		return runEditor(filePath)
 	},
 }
 
+func runEditor(filePath string) error {
+	editor := os.Getenv("EDITOR")
+
+	if editor == "" {
+		editor = "vim"
+	}
+
+	splitted := strings.Split(editor, " ")
+	cname := splitted[0]
+	args := splitted[1:]
+	args = append(args, filePath)
+
+	cmd := exec.Command(cname, args[:]...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+
+	return cmd.Run()
+}
+
 func init() {
-	rootCmd.AddCommand(browseCmd)
+	rootCmd.AddCommand(editCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// browseCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// editCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// browseCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// editCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

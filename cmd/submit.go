@@ -27,22 +27,22 @@ import (
 )
 
 var skipTest bool
+var noDocker bool
 
 // submitCmd represents the submit command
 var submitCmd = &cobra.Command{
 	Use:   "submit DIRECTORY",
 	Short: "Submit to AtCoder",
+	Aliases: []string{"s"},
+	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		username := viper.GetString("username")
 		password := viper.GetString("password")
 
-		if len(args) != 1 {
-			return fmt.Errorf("please specify directory path")
-		}
 		dir := args[0]
 
 		if !skipTest {
-			allPassed, err := tester.RunTest(dir)
+			allPassed, err := tester.RunTest(dir, !noDocker)
 			if err != nil {
 				return err
 			}
@@ -91,6 +91,7 @@ var submitCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(submitCmd)
 	submitCmd.Flags().BoolVarP(&skipTest, "skip-test", "s", false, "skip test")
+	submitCmd.Flags().BoolVar(&noDocker, "no-docker", false, "no docker")
 
 	// Here you will define your flags and configuration settings.
 

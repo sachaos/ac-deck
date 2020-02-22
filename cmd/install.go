@@ -16,39 +16,55 @@ limitations under the License.
 package cmd
 
 import (
-	"github.com/pkg/browser"
+	"context"
+	"fmt"
+	"github.com/docker/docker/client"
 	"github.com/sachaos/atcoder/files"
+	"github.com/sachaos/atcoder/tester"
 	"github.com/spf13/cobra"
 )
 
-// browseCmd represents the browse command
-var browseCmd = &cobra.Command{
-	Use:   "browse",
-	Short: "browse AtCoder task page",
-	Aliases: []string{"b"},
+// installCmd represents the install command
+var installCmd = &cobra.Command{
+	Use:   "install [LANGUAGE_NAME]",
+	Short: "Install language Docker image",
 	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		dir := args[0]
+		language := args[0]
 
-		conf, err := files.LoadConf(dir)
+		if !validateLanguage(language) {
+			fmt.Println("Please specify supported language. Refer `atcoder languages`.")
+			return fmt.Errorf("invalid language")
+		}
+
+		environment := files.Environments[language]
+
+		cli, err := client.NewClientWithOpts(client.FromEnv)
 		if err != nil {
 			return err
 		}
 
-		return browser.OpenURL(conf.AtCoder.TaskURL)
+		err = tester.PrepareImage(cli, context.Background(), environment.DockerImage)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println("Preparation completed")
+
+		return nil
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(browseCmd)
+	rootCmd.AddCommand(installCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// browseCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// installCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// browseCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// installCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
