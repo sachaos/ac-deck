@@ -22,13 +22,12 @@ type Result struct {
 	Log    io.ReadWriter
 }
 
-
 type Tester interface {
 	Run(ctx context.Context, index int, example *lib.Example) (*Result, error)
 	Clean(ctx context.Context) error
 }
 
-func RunTest(dir string, onContainer bool) (bool, error) {
+func RunTest(dir string, onContainer bool, timeout int) (bool, error) {
 	conf, err := files.LoadConf(dir)
 	if err != nil {
 		return false, err
@@ -60,7 +59,7 @@ func RunTest(dir string, onContainer bool) (bool, error) {
 
 	all := true
 	for index, example := range examples {
-		ctx, _ := context.WithTimeout(context.Background(), 3*time.Second)
+		ctx, _ := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
 		result, err := tester.Run(ctx, index, example)
 		if err != nil {
 			return false, err
@@ -88,7 +87,7 @@ func judgeResult(index int, example *lib.Example, result *Result) (bool, error) 
 	actualStr := strings.TrimSpace(string(actual))
 
 	fmt.Printf("\n")
-	fmt.Printf(color.Bold.Sprintf("Case %d: ", index + 1))
+	fmt.Printf(color.Bold.Sprintf("Case %d: ", index+1))
 	passed := actualStr == example.Exp
 	if passed {
 		color.Green.Printf("AC\n")

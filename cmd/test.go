@@ -5,6 +5,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var timeout int
+
 // testCmd represents the test command
 var testCmd = &cobra.Command{
 	Use:   "test DIRECTORY",
@@ -14,7 +16,7 @@ var testCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		dir := args[0]
 
-		_, err := tester.RunTest(dir, !noDocker)
+		_, err := tester.RunTest(dir, !noDocker, timeout)
 		if err != nil {
 			return err
 		}
@@ -26,4 +28,5 @@ var testCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(testCmd)
 	testCmd.Flags().BoolVar(&noDocker, "no-docker", false, "no docker")
+	testCmd.Flags().IntVarP(&timeout, "timeout", "t", 3, "timeout (in second)")
 }
