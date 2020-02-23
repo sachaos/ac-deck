@@ -186,6 +186,36 @@ var Environments = map[string]*Environment{
 		BuildCmdOnDocker: "javac Main.java",
 		CmdOnDocker:      "java -Xss256M Main",
 	},
+	"c_gcc": {
+		Key:          "c_gcc",
+		Language:     "C (GCC 5.4.1)",
+		SrcName:      "main.c",
+		Template:     "internal/c/main.c",
+		LanguageCode: "3004",
+
+		BuildCmd: "gcc -std=gnu11 -O2 -o a.out main.c -lm",
+		Cmd:      "./a.out",
+
+		DockerImage:      "docker.io/library/gcc:5.4.0",
+		BuildCmdOnDocker: "gcc -std=gnu11 -O2 -o a.out main.c -lm",
+		CmdOnDocker:      "./a.out",
+	},
+	"c": { // Alias of c_gcc
+		Key:          "c",
+		Language:     "C (GCC 5.4.1)",
+		SrcName:      "main.c",
+		Template:     "internal/c/main.c",
+		LanguageCode: "3004",
+
+		BuildCmd: "gcc -std=gnu11 -O2 -o a.out main.c -lm",
+		Cmd:      "./a.out",
+
+		DockerImage:      "docker.io/library/gcc:5.4.0",
+		BuildCmdOnDocker: "gcc -std=gnu11 -O2 -o a.out main.c -lm",
+		CmdOnDocker:      "./a.out",
+
+		Note: "Just alias for c_gcc",
+	},
 }
 
 func WriteConf(dir string, conf *Conf) error {
