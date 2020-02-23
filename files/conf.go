@@ -155,8 +155,36 @@ var Environments = map[string]*Environment{
 		Cmd:      "ruby --disable-gems main.rb",
 
 		DockerImage:      "docker.io/library/ruby:2.3.3-alpine",
-		CmdOnDocker:      "ruby --disable-gems -w -c main.rb",
-		BuildCmdOnDocker: "ruby --disable-gems main.rb",
+		BuildCmdOnDocker: "ruby --disable-gems -w -c main.rb",
+		CmdOnDocker:      "ruby --disable-gems main.rb",
+	},
+	"java7": {
+		Key:          "java7",
+		Language:     "Java7 (OpenJDK 1.7.0)",
+		SrcName:      "Main.java",
+		Template:     "internal/java/Main.java",
+		LanguageCode: "3015",
+
+		BuildCmd: "javac Main.java",
+		Cmd:      "java -Xss256M Main",
+
+		DockerImage:      "docker.io/library/openjdk:7",
+		BuildCmdOnDocker: "javac Main.java",
+		CmdOnDocker:      "java -Xss256M Main",
+	},
+	"java8": {
+		Key:          "java8",
+		Language:     "Java8 (OpenJDK 1.8.0)",
+		SrcName:      "Main.java",
+		Template:     "internal/java/Main.java",
+		LanguageCode: "3016",
+
+		BuildCmd: "javac Main.java",
+		Cmd:      "java -Xss256M Main",
+
+		DockerImage:      "docker.io/library/openjdk:8",
+		BuildCmdOnDocker: "javac Main.java",
+		CmdOnDocker:      "java -Xss256M Main",
 	},
 }
 
