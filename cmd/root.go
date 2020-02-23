@@ -14,11 +14,13 @@ import (
 var cfgFile string
 var confName = ".atcoder.toml"
 var debugFlag bool
+var version string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "atcoder",
 	Short: "Unofficial CLI for AtCoder users",
+	Version: version,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
