@@ -18,7 +18,7 @@ Unofficial CLI for AtCoder users.
 ## Linux
 
 ```shell
-$ sudo curl -L -o /usr/local/bin/atcoder https://github.com/sachaos/atcoder/releases/download/v0.2.4/atcoder_linux_amd64 && sudo chmod +x /usr/local/bin/atcoder
+$ sudo curl -L -o /usr/local/bin/atcoder https://github.com/sachaos/atcoder/releases/download/v0.2.6/atcoder_linux_amd64 && sudo chmod +x /usr/local/bin/atcoder
 ```
 
 ## Mac OS X
