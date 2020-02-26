@@ -2,11 +2,14 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"path"
+	"syscall"
+
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"os"
-	"path"
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 // configCmd represents the config command
@@ -18,7 +21,9 @@ var configCmd = &cobra.Command{
 		fmt.Printf("username: ")
 		fmt.Scanf("%s", &username)
 		fmt.Printf("password: ")
-		fmt.Scanf("%s", &password)
+		bytePassword, _ := terminal.ReadPassword(int(syscall.Stdin))
+		password = string(bytePassword)
+		fmt.Printf("\n")
 		fmt.Printf("language (list supported languages by `atcoder languages`): ")
 		fmt.Scanf("%s", &language)
 
