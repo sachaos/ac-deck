@@ -14,6 +14,9 @@ build: prepare
 install: prepare
 	go install $(BUILD_OPTION)
 
+test: prepare
+	go test ./...
+
 release: prepare
 	GOOS=windows GOARCH=amd64 go build -o $(ARTIFACTS_DIR)/atcoder_windows_amd64 $(BUILD_OPTION)
 	GOOS=darwin GOARCH=amd64 go build -o $(ARTIFACTS_DIR)/atcoder_darwin_amd64 $(BUILD_OPTION)
