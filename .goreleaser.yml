@@ -1,8 +1,6 @@
 before:
   hooks:
     - go mod download
-    - go get github.com/rakyll/statik
-    - go generate ./...
 builds:
 - env:
   - CGO_ENABLED=0
