@@ -35,6 +35,5 @@ jobs:
         formula-name: atcoder
         homebrew-tap: sachaos/homebrew-atcoder
         base-branch: master
-        commit-message: "${{formulaName}} ${{version}}"
       env:
         COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
