@@ -1,0 +1,28 @@
+name: Publish Docker image to GitHub Package Registry
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+    steps:
+
+    - name: Copy Repo Files
+      uses: actions/checkout@master
+
+    - name: Publish Docker Image to GPR
+      uses: machine-learning-apps/gpr-docker-publish@master
+      with:
+        IMAGE_NAME: 'python3'
+        DOCKERFILE_PATH: 'docker/python3/Dockerfile'
+        BUILD_CONTEXT: 'docker/python3/'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # This second step is illustrative and shows how to reference the 
+    # output variables.  This is completely optional.
+    - name: Show outputs of previous step
+      run: |
+        echo "The name:tag of the Docker Image is: $VAR1"
+        echo "The docker image is hosted at $VAR2"
+      env:
+        VAR1: ${{ steps.docker.outputs.IMAGE_SHA_NAME }}
+        VAR2: ${{ steps.docker.outputs.IMAGE_URL }}
