@@ -25,9 +25,9 @@ var languagesCmd = &cobra.Command{
 		})
 
 		w := tablewriter.NewWriter(os.Stdout)
-		w.SetHeader([]string{"key", "name", "note"})
+		w.SetHeader([]string{"key", "name", "image", "note"})
 		for _, env := range environments {
-			w.Append([]string{env.Key, env.Language, env.Note})
+			w.Append([]string{env.Key, env.Language, env.DockerImage, env.Note})
 		}
 		w.Render()
 	},

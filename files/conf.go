@@ -130,7 +130,7 @@ var Environments = map[string]*Environment{
 		Cmd: "python3 -B main.py",
 
 		CmdOnDocker: "python3 -B main.py",
-		DockerImage: "docker.io/library/python:3.4.3-slim",
+		DockerImage: "docker.io/sachaos/atcoder-python3:latest",
 	},
 	"python2": {
 		Key:          "python2",
