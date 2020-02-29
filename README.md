@@ -18,7 +18,7 @@ Unofficial CLI for AtCoder users.
 ## Linux
 
 ```shell
-$ sudo curl -L -o /usr/local/bin/atcoder https://github.com/sachaos/atcoder/releases/download/v0.2.7/atcoder_linux_amd64 && sudo chmod +x /usr/local/bin/atcoder
+$ sudo curl -L -o /usr/local/bin/atcoder https://github.com/sachaos/atcoder/releases/download/v0.2.8/atcoder_linux_amd64 && sudo chmod +x /usr/local/bin/atcoder
 ```
 
 ## Mac OS X
@@ -111,7 +111,6 @@ $ atcoder abc153/abc153_a submit --skip-test
 - Python2 (2.7.6)
     - You cannot use numpy, scipy, scikits now.
 - Python3 (3.4.3)
-    - You cannot use numpy, scipy, scikits now.
 - Ruby (2.3.3)
 - C (GCC 5.4.1)
     - Using gcc 5.4.0 docker image now.
