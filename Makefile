@@ -1,7 +1,5 @@
-.PHONY: prepare build install release
+.PHONY: prepare build install
 
-ARTIFACTS_DIR=artifacts/${VERSION}
-GITHUB_USERNAME=sachaos
 BUILD_OPTION=-ldflags "-X github.com/sachaos/atcoder/cmd.version=${VERSION}"
 
 prepare:
@@ -16,9 +14,3 @@ install: prepare
 
 test: prepare
 	go test ./...
-
-release: prepare
-	GOOS=windows GOARCH=amd64 go build -o $(ARTIFACTS_DIR)/atcoder_windows_amd64 $(BUILD_OPTION)
-	GOOS=darwin GOARCH=amd64 go build -o $(ARTIFACTS_DIR)/atcoder_darwin_amd64 $(BUILD_OPTION)
-	GOOS=linux GOARCH=amd64 go build -o $(ARTIFACTS_DIR)/atcoder_linux_amd64 $(BUILD_OPTION)
-	ghr -u $(GITHUB_USERNAME) -t $(shell cat github_token) --replace ${VERSION} $(ARTIFACTS_DIR)
