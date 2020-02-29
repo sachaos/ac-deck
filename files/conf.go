@@ -52,8 +52,8 @@ var Environments = map[string]*Environment{
 		Cmd:      "./a.out",
 		CleanCmd: "rm ./a.out",
 
-		DockerImage:      "docker.io/library/gcc:5.4.0",
-		BuildCmdOnDocker: "g++ -std=gnu++1y -O2 -o a.out main.cpp",
+		DockerImage:      "docker.io/sachaos/atcoder-gcc:latest",
+		BuildCmdOnDocker: "g++ -std=gnu++1y -I /opt/boost/boost_1_60_0 -L /opt/boost/boost_1_60_0 -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 
 		Note: "Just alias for c++14_gcc",
@@ -69,8 +69,8 @@ var Environments = map[string]*Environment{
 		Cmd:      "./a.out",
 		CleanCmd: "rm ./a.out",
 
-		DockerImage:      "docker.io/library/gcc:5.4.0",
-		BuildCmdOnDocker: "g++ -std=gnu++1y -O2 -o a.out main.cpp",
+		DockerImage:      "docker.io/sachaos/atcoder-gcc:latest",
+		BuildCmdOnDocker: "g++ -std=gnu++1y -I /opt/boost/boost_1_60_0 -L /opt/boost/boost_1_60_0 -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 	},
 	"c++": { // Alias of c++_gcc
@@ -84,8 +84,8 @@ var Environments = map[string]*Environment{
 		Cmd:      "./a.out",
 		CleanCmd: "rm ./a.out",
 
-		DockerImage:      "docker.io/library/gcc:5.4.0",
-		BuildCmdOnDocker: "g++ -std=gnu++03 -O2 -o a.out main.cpp",
+		DockerImage:      "docker.io/sachaos/atcoder-gcc:latest",
+		BuildCmdOnDocker: "g++ -std=gnu++03 -I /opt/boost/boost_1_60_0 -L /opt/boost/boost_1_60_0 -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 
 		Note: "Just alias for c++_gcc",
@@ -101,8 +101,8 @@ var Environments = map[string]*Environment{
 		Cmd:      "./a.out",
 		CleanCmd: "rm ./a.out",
 
-		DockerImage:      "docker.io/library/gcc:5.4.0",
-		BuildCmdOnDocker: "g++ -std=gnu++03 -O2 -o a.out main.cpp",
+		DockerImage:      "docker.io/sachaos/atcoder-gcc:latest",
+		BuildCmdOnDocker: "g++ -std=gnu++03 -I /opt/boost/boost_1_60_0 -L /opt/boost/boost_1_60_0 -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 	},
 	"go": {
@@ -196,7 +196,7 @@ var Environments = map[string]*Environment{
 		BuildCmd: "gcc -std=gnu11 -O2 -o a.out main.c -lm",
 		Cmd:      "./a.out",
 
-		DockerImage:      "docker.io/library/gcc:5.4.0",
+		DockerImage:      "docker.io/sachaos/atcoder-gcc:latest",
 		BuildCmdOnDocker: "gcc -std=gnu11 -O2 -o a.out main.c -lm",
 		CmdOnDocker:      "./a.out",
 	},
@@ -210,7 +210,7 @@ var Environments = map[string]*Environment{
 		BuildCmd: "gcc -std=gnu11 -O2 -o a.out main.c -lm",
 		Cmd:      "./a.out",
 
-		DockerImage:      "docker.io/library/gcc:5.4.0",
+		DockerImage:      "docker.io/sachaos/atcoder-gcc:latest",
 		BuildCmdOnDocker: "gcc -std=gnu11 -O2 -o a.out main.c -lm",
 		CmdOnDocker:      "./a.out",
 
