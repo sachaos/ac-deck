@@ -29,3 +29,13 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+brews:
+- github:
+    owner: sachaos
+    name: homebrew-atcoder
+  folder: Formula
+  homepage: https://github.com/sachaos/atcoder
+  description: Unofficial CLI for AtCoder users
+  skip_upload: auto
+  test: |
+    system "#{bin}/atcoder", "--version"
