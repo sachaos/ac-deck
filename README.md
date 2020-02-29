@@ -107,14 +107,12 @@ $ atcoder abc153/abc153_a submit --skip-test
 [AtCoder Languages and Compiler options](https://language-test-201603.contest.atcoder.jp/)
 
 - C++14 (GCC 5.4.1)
-    - Using gcc 5.4.0 docker image now.
-    - You cannot use boost now.
+- C++ (GCC 5.4.1)
 - Go (1.6)
 - Python2 (2.7.6)
     - You cannot use numpy, scipy, scikits now.
 - Python3 (3.4.3)
 - Ruby (2.3.3)
 - C (GCC 5.4.1)
-    - Using gcc 5.4.0 docker image now.
 - Java7 (OpenJDK 1.7.0)
 - Java8 (OpenJDK 1.8.0)
