@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/sachaos/atcoder/files"
-	"github.com/sachaos/atcoder/lib"
-	"github.com/sachaos/atcoder/tester"
+	"github.com/sachaos/atcoder/lib/atcoder"
+	"github.com/sachaos/atcoder/lib/files"
+	"github.com/sachaos/atcoder/lib/tester"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
@@ -40,7 +40,7 @@ var submitCmd = &cobra.Command{
 			}
 		}
 
-		ac, err := lib.NewAtCoder()
+		ac, err := atcoder.NewAtCoder()
 		if err != nil {
 			return err
 		}

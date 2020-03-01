@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/docker/docker/client"
-	"github.com/sachaos/atcoder/files"
-	"github.com/sachaos/atcoder/tester"
+	"github.com/sachaos/atcoder/lib/files"
+	"github.com/sachaos/atcoder/lib/tester"
 	"github.com/spf13/cobra"
 )
 

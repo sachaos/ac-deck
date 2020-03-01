@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/sachaos/atcoder/files"
-	"github.com/sachaos/atcoder/lib"
-	"github.com/sachaos/atcoder/preparer"
+	"github.com/sachaos/atcoder/lib/atcoder"
+	"github.com/sachaos/atcoder/lib/files"
+	"github.com/sachaos/atcoder/lib/preparer"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -29,7 +29,7 @@ var prepareCmd = &cobra.Command{
 
 		fmt.Printf("Using template of %s\n", language)
 
-		ac, err := lib.NewAtCoder()
+		ac, err := atcoder.NewAtCoder()
 		if err != nil {
 			return err
 		}

@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/sachaos/atcoder/files"
+	"github.com/sachaos/atcoder/lib/files"
 	"github.com/spf13/cobra"
 	"os"
 	"os/exec"

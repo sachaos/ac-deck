@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/pkg/browser"
-	"github.com/sachaos/atcoder/files"
+	"github.com/sachaos/atcoder/lib/files"
 	"github.com/spf13/cobra"
 )
 

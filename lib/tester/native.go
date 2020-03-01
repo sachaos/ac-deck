@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/sachaos/atcoder/lib/atcoder"
 	"io"
 	"os"
 	"os/exec"
@@ -11,8 +12,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/sachaos/atcoder/files"
-	"github.com/sachaos/atcoder/lib"
+	"github.com/sachaos/atcoder/lib/files"
 )
 
 type NativeTester struct {
@@ -38,7 +38,7 @@ func NewNativeTester(dir string, conf *files.Conf) (*NativeTester, error) {
 	return &NativeTester{dir: dir, conf: conf}, nil
 }
 
-func (t *NativeTester) Run(ctx context.Context, index int, example *lib.Example) (*Result, error) {
+func (t *NativeTester) Run(ctx context.Context, index int, example *atcoder.Example) (*Result, error) {
 	result := Result{
 		Log: &bytes.Buffer{},
 		Actual: &bytes.Buffer{},
@@ -75,7 +75,7 @@ func (t *NativeTester) Clean(ctx context.Context) error {
 	return nil
 }
 
-func runTestOnNative(ctx context.Context, args []string, dir string, c *lib.Example, r *Result) error {
+func runTestOnNative(ctx context.Context, args []string, dir string, c *atcoder.Example, r *Result) error {
 	cmd := exec.CommandContext(ctx, args[0], args[1:]...)
 	cmd.Dir = dir
 	cmd.Stdin = strings.NewReader(c.In)

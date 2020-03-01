@@ -1,6 +1,6 @@
 package cmd
 
-import "github.com/sachaos/atcoder/files"
+import "github.com/sachaos/atcoder/lib/files"
 
 func validateLanguage(lang string) bool {
 	for key := range files.Environments {

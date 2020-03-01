@@ -3,8 +3,8 @@ package preparer
 import (
 	"fmt"
 	"github.com/rakyll/statik/fs"
-	"github.com/sachaos/atcoder/files"
-	"github.com/sachaos/atcoder/lib"
+	"github.com/sachaos/atcoder/lib/atcoder"
+	"github.com/sachaos/atcoder/lib/files"
 	_ "github.com/sachaos/atcoder/statik"
 	"io"
 	"io/ioutil"
@@ -30,7 +30,7 @@ func createFile(fpath string) (*os.File, error) {
 }
 
 type TemplateData struct {
-	Task *lib.Task
+	Task *atcoder.Task
 }
 
 func prepareTemplate(p string) (*template.Template, error) {
@@ -64,7 +64,7 @@ func prepareTemplate(p string) (*template.Template, error) {
 	return template.New("src").Parse(string(all))
 }
 
-func Prepare(contest *lib.Contest, dir string, env *files.Environment) error {
+func Prepare(contest *atcoder.Contest, dir string, env *files.Environment) error {
 	template, err := prepareTemplate(env.Template)
 	if err != nil {
 		return err

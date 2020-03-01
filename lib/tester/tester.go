@@ -3,6 +3,7 @@ package tester
 import (
 	"context"
 	"fmt"
+	"github.com/sachaos/atcoder/lib/atcoder"
 	"io"
 	"io/ioutil"
 	"os"
@@ -13,8 +14,7 @@ import (
 	"github.com/gookit/color"
 	"github.com/sirupsen/logrus"
 
-	"github.com/sachaos/atcoder/files"
-	"github.com/sachaos/atcoder/lib"
+	"github.com/sachaos/atcoder/lib/files"
 )
 
 type Result struct {
@@ -23,7 +23,7 @@ type Result struct {
 }
 
 type Tester interface {
-	Run(ctx context.Context, index int, example *lib.Example) (*Result, error)
+	Run(ctx context.Context, index int, example *atcoder.Example) (*Result, error)
 	Clean(ctx context.Context) error
 }
 
@@ -78,7 +78,7 @@ func RunTest(dir string, onContainer bool, timeout int) (bool, error) {
 	return all, nil
 }
 
-func judgeResult(index int, example *lib.Example, result *Result) (bool, error) {
+func judgeResult(index int, example *atcoder.Example, result *Result) (bool, error) {
 	actual, err := ioutil.ReadAll(result.Actual)
 	if err != nil {
 		return false, err

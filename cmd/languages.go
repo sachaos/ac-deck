@@ -7,7 +7,7 @@ import (
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
 
-	"github.com/sachaos/atcoder/files"
+	"github.com/sachaos/atcoder/lib/files"
 )
 
 // languagesCmd represents the languages command

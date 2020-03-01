@@ -1,4 +1,4 @@
-package lib
+package atcoder
 
 type Contest struct {
 	ID string

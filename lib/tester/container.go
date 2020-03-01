@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/sachaos/atcoder/lib/atcoder"
 	"io/ioutil"
 	"os"
 	"path"
@@ -18,8 +19,7 @@ import (
 	"github.com/docker/docker/pkg/stdcopy"
 	"github.com/sirupsen/logrus"
 
-	"github.com/sachaos/atcoder/files"
-	"github.com/sachaos/atcoder/lib"
+	"github.com/sachaos/atcoder/lib/files"
 )
 
 type ContainerTester struct {
@@ -59,7 +59,7 @@ func NewContainerTester(ctx context.Context, cli *client.Client, conf *files.Con
 	}, nil
 }
 
-func (t *ContainerTester) Run(ctx context.Context, index int, example *lib.Example) (*Result, error) {
+func (t *ContainerTester) Run(ctx context.Context, index int, example *atcoder.Example) (*Result, error) {
 	var result Result
 	r, err := ExecWithStdin(ctx, t.cli, t.containerId, strings.Split(t.conf.Environment.Cmd, " "), example.In)
 	if err != nil {

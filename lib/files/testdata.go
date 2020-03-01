@@ -1,7 +1,7 @@
 package files
 
 import (
-	"github.com/sachaos/atcoder/lib"
+	"github.com/sachaos/atcoder/lib/atcoder"
 	"gopkg.in/yaml.v2"
 	"os"
 	"path"
@@ -9,7 +9,7 @@ import (
 
 const TESTDATA_NAME = "testdata.yaml"
 
-func WriteTestData(dir string, examples []*lib.Example) error {
+func WriteTestData(dir string, examples []*atcoder.Example) error {
 	p := path.Join(dir, TESTDATA_NAME)
 	file, err := createFile(p)
 	if err != nil {
@@ -20,7 +20,7 @@ func WriteTestData(dir string, examples []*lib.Example) error {
 	return yaml.NewEncoder(file).Encode(examples)
 }
 
-func LoadTestData(dir string) ([]*lib.Example, error) {
+func LoadTestData(dir string) ([]*atcoder.Example, error) {
 	p := path.Join(dir, TESTDATA_NAME)
 	file, err := os.Open(p)
 	if err != nil {
@@ -28,7 +28,7 @@ func LoadTestData(dir string) ([]*lib.Example, error) {
 	}
 	defer file.Close()
 
-	var examples []*lib.Example
+	var examples []*atcoder.Example
 	err = yaml.NewDecoder(file).Decode(&examples)
 	if err != nil {
 		return nil, err
