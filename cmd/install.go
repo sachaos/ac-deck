@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/docker/docker/client"
-	"github.com/sachaos/atcoder/lib/files"
+	"github.com/sachaos/atcoder/lib/environment"
 	"github.com/sachaos/atcoder/lib/tester"
 	"github.com/spf13/cobra"
 )
@@ -22,14 +22,14 @@ var installCmd = &cobra.Command{
 			return fmt.Errorf("invalid language")
 		}
 
-		environment := files.Environments[language]
+		env := environment.DefaultEnvironmentSelector.Select(language)
 
 		cli, err := client.NewClientWithOpts(client.FromEnv)
 		if err != nil {
 			return err
 		}
 
-		err = tester.PrepareImage(cli, context.Background(), environment.DockerImage)
+		err = tester.PrepareImage(cli, context.Background(), env.DockerImage)
 		if err != nil {
 			return err
 		}

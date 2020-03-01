@@ -1,13 +1,9 @@
 package cmd
 
-import "github.com/sachaos/atcoder/lib/files"
+import (
+	"github.com/sachaos/atcoder/lib/environment"
+)
 
 func validateLanguage(lang string) bool {
-	for key := range files.Environments {
-		if key == lang {
-			return true
-		}
-	}
-
-	return false
+	return environment.DefaultEnvironmentSelector.Has(lang)
 }

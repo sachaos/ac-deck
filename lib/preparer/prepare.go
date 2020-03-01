@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/rakyll/statik/fs"
 	"github.com/sachaos/atcoder/lib/atcoder"
+	"github.com/sachaos/atcoder/lib/environment"
 	"github.com/sachaos/atcoder/lib/files"
 	_ "github.com/sachaos/atcoder/statik"
 	"io"
@@ -64,7 +65,7 @@ func prepareTemplate(p string) (*template.Template, error) {
 	return template.New("src").Parse(string(all))
 }
 
-func Prepare(contest *atcoder.Contest, dir string, env *files.Environment) error {
+func Prepare(contest *atcoder.Contest, dir string, env *environment.Environment) error {
 	template, err := prepareTemplate(env.Template)
 	if err != nil {
 		return err

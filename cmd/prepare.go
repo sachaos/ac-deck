@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/sachaos/atcoder/lib/atcoder"
-	"github.com/sachaos/atcoder/lib/files"
+	"github.com/sachaos/atcoder/lib/environment"
 	"github.com/sachaos/atcoder/lib/preparer"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -44,7 +44,7 @@ var prepareCmd = &cobra.Command{
 			return err
 		}
 
-		return preparer.Prepare(contest, ".", files.Environments[language])
+		return preparer.Prepare(contest, ".", environment.DefaultEnvironmentSelector.Select(language))
 	},
 }
 

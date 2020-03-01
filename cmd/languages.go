@@ -1,13 +1,11 @@
 package cmd
 
 import (
-	"os"
-	"sort"
-
 	"github.com/olekukonko/tablewriter"
+	"github.com/sachaos/atcoder/lib/environment"
 	"github.com/spf13/cobra"
-
-	"github.com/sachaos/atcoder/lib/files"
+	"os"
+	"strings"
 )
 
 // languagesCmd represents the languages command
@@ -15,19 +13,13 @@ var languagesCmd = &cobra.Command{
 	Use:   "languages",
 	Short: "list supported languages",
 	Run: func(cmd *cobra.Command, args []string) {
-		environments := []*files.Environment{}
-		for _, env := range files.Environments {
-			environments = append(environments, env)
-		}
-
-		sort.Slice(environments, func(i, j int) bool {
-			return environments[i].LanguageCode < environments[j].LanguageCode
-		})
-
 		w := tablewriter.NewWriter(os.Stdout)
-		w.SetHeader([]string{"key", "name", "image", "note"})
-		for _, env := range environments {
-			w.Append([]string{env.Key, env.Language, env.DockerImage, env.Note})
+		w.SetHeader([]string{"key", "alias", "name", "image", "note"})
+		selector := environment.DefaultEnvironmentSelector
+
+		for _, key := range selector.Keys() {
+			env := selector.Select(key)
+			w.Append([]string{env.Key, strings.Join(selector.Aliases(key), ","), env.Language, env.DockerImage, env.Note})
 		}
 		w.Render()
 	},
