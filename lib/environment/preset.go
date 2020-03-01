@@ -135,5 +135,20 @@ var Environments = map[string]*Environment{
 		BuildCmdOnDocker: "gcc -std=gnu11 -O2 -o a.out main.c -lm",
 		CmdOnDocker:      "./a.out",
 	},
+	"c#": {
+		Key:          "c#",
+		Language:     "C# (Mono 4.6.2.0)",
+		SrcName:      "Main.cs",
+		Template:     "internal/cs/Main.cs",
+		LanguageCode: "3006",
+
+		BuildCmd: "mcs -warn:0 -o+ -r:System.Numerics Main.cs",
+		Cmd:      "mono Main.exe",
+		CleanCmd: "rm -rf Main.exe",
+
+		DockerImage:      "docker.io/library/mono:4.6.2",
+		BuildCmdOnDocker: "mcs -warn:0 -o+ -r:System.Numerics Main.cs",
+		CmdOnDocker:      "mono Main.exe",
+	},
 }
 
