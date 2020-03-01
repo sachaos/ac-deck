@@ -20,7 +20,7 @@ Unofficial CLI for AtCoder users.
 Download binary from [Release page](https://github.com/sachaos/atcoder/releases)
 
 ```shell
-$ curl -L -o ./atcoder.tar.gz https://github.com/sachaos/atcoder/releases/download/v0.2.10/atcoder_0.2.10_Linux_x86_64.tar.gz && mkdir ./atcoder-bin && tar xvzf ./atcoder.tar.gz -C ./atcoder-bin && sudo mv ./atcoder-bin/atcoder /usr/local/bin/atcoder && sudo chmod +x /usr/local/bin/atcoder
+$ curl -L -o ./atcoder.tar.gz https://github.com/sachaos/atcoder/releases/download/v0.2.11/atcoder_0.2.11_Linux_x86_64.tar.gz && mkdir ./atcoder-bin && tar xvzf ./atcoder.tar.gz -C ./atcoder-bin && sudo mv ./atcoder-bin/atcoder /usr/local/bin/atcoder && sudo chmod +x /usr/local/bin/atcoder
 ```
 
 ## Mac OS X
@@ -108,6 +108,7 @@ $ atcoder abc153/abc153_a submit --skip-test
 
 - C++14 (GCC 5.4.1)
 - C++ (GCC 5.4.1)
+- C# (Mono 4.6.2.0)
 - Go (1.6)
 - Python2 (2.7.6)
     - You cannot use numpy, scipy, scikits now.
