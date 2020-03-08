@@ -60,12 +60,14 @@ func RunTest(dir string, onContainer bool, timeout int) (bool, error) {
 	all := true
 	for index, example := range examples {
 		ctx, _ := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
+		start := time.Now()
 		result, err := tester.Run(ctx, index, example)
 		if err != nil {
 			return false, err
 		}
+		end := time.Now()
 
-		ok, err := judgeResult(index, example, result)
+		ok, err := judgeResult(index, example, result, end.Sub(start))
 		if err != nil {
 			return false, err
 		}
@@ -78,7 +80,7 @@ func RunTest(dir string, onContainer bool, timeout int) (bool, error) {
 	return all, nil
 }
 
-func judgeResult(index int, example *atcoder.Example, result *Result) (bool, error) {
+func judgeResult(index int, example *atcoder.Example, result *Result, duration time.Duration) (bool, error) {
 	actual, err := ioutil.ReadAll(result.Actual)
 	if err != nil {
 		return false, err
@@ -100,6 +102,8 @@ func judgeResult(index int, example *atcoder.Example, result *Result) (bool, err
 		fmt.Printf("\nActually:\n")
 		fmt.Println(actualStr)
 	}
+
+	fmt.Printf("Time: %s\n", duration)
 
 	errOutput, err := ioutil.ReadAll(result.Log)
 	if err != nil {
