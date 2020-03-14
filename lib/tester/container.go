@@ -60,16 +60,16 @@ func NewContainerTester(ctx context.Context, cli *client.Client, conf *files.Con
 }
 
 func (t *ContainerTester) Run(ctx context.Context, index int, example *atcoder.Example) (*Result, error) {
-	var result Result
 	r, err := ExecWithStdin(ctx, t.cli, t.containerId, strings.Split(t.conf.Environment.Cmd, " "), example.In)
 	if err != nil {
 		return nil, err
 	}
 
-	result.Actual = bytes.NewBufferString(r.Stdout)
-	result.Log = bytes.NewBufferString(r.Stderr)
-
-	return &result, nil
+	return &Result{
+		Actual: bytes.NewBufferString(r.Stdout),
+		Log:    bytes.NewBufferString(r.Stderr),
+		ExitCode:  r.ExitCode,
+	}, nil
 }
 
 func (t *ContainerTester) Clean(ctx context.Context) error {
@@ -117,7 +117,7 @@ func startContainer(ctx context.Context, cli *client.Client, conf *files.Conf, d
 	return containerId, nil
 }
 
-func PrepareImage(cli *client.Client, ctx context.Context, imageName string) (error) {
+func PrepareImage(cli *client.Client, ctx context.Context, imageName string) error {
 	_, _, err := cli.ImageInspectWithRaw(ctx, imageName)
 	if client.IsErrNotFound(err) {
 		fmt.Printf("Image not found: %s\n", imageName)

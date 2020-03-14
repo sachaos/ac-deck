@@ -18,8 +18,9 @@ import (
 )
 
 type Result struct {
-	Actual io.ReadWriter
-	Log    io.ReadWriter
+	Actual   io.ReadWriter
+	Log      io.ReadWriter
+	ExitCode int
 }
 
 type Tester interface {
@@ -90,7 +91,7 @@ func judgeResult(index int, example *atcoder.Example, result *Result, duration t
 
 	fmt.Printf("\n")
 	fmt.Printf(color.Bold.Sprintf("Case %d: ", index+1))
-	passed := actualStr == example.Exp
+	passed := actualStr == example.Exp && result.ExitCode == 0
 	if passed {
 		color.Green.Printf("AC\n")
 	} else {
@@ -101,6 +102,7 @@ func judgeResult(index int, example *atcoder.Example, result *Result, duration t
 		fmt.Println(example.Exp)
 		fmt.Printf("\nActually:\n")
 		fmt.Println(actualStr)
+		fmt.Printf("\nExit with: %d\n", result.ExitCode)
 	}
 
 	fmt.Printf("Time: %s\n", duration)

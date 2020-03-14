@@ -86,8 +86,10 @@ func runTestOnNative(ctx context.Context, args []string, dir string, c *atcoder.
 	if err != nil {
 		io.Copy(os.Stderr, r.Log)
 		io.Copy(os.Stderr, r.Actual)
-		return fmt.Errorf("on native: %w", err)
+		return err
 	}
+
+	r.ExitCode = cmd.ProcessState.ExitCode()
 
 	return nil
 }
