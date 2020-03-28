@@ -40,7 +40,29 @@ var statusCmd = &cobra.Command{
 			return statuses[i].SubmissionDate < statuses[j].SubmissionDate
 		})
 		for _, status := range statuses {
-			w.Append([]string{status.SubmissionDate, status.Problem, status.Language, status.Point, status.CodeLength, status.Result, status.ElapsedTime, status.Memory})
+			var resultColor tablewriter.Colors
+			switch status.Result {
+			case "AC":
+				resultColor = tablewriter.Colors{tablewriter.FgHiGreenColor}
+			case "WA":
+				resultColor = tablewriter.Colors{tablewriter.FgHiRedColor}
+			case "TLE":
+				resultColor = tablewriter.Colors{tablewriter.FgHiYellowColor}
+			case "RE":
+				resultColor = tablewriter.Colors{tablewriter.FgHiYellowColor}
+			case "CE":
+				resultColor = tablewriter.Colors{tablewriter.FgHiYellowColor}
+			case "OLE":
+				resultColor = tablewriter.Colors{tablewriter.FgHiYellowColor}
+			case "MLE":
+				resultColor = tablewriter.Colors{tablewriter.FgHiYellowColor}
+			case "IE":
+				resultColor = tablewriter.Colors{tablewriter.FgHiYellowColor}
+			default:
+				resultColor = tablewriter.Colors{tablewriter.FgHiBlackColor}
+			}
+			colors := []tablewriter.Colors{{}, {}, {}, {}, {}, resultColor, {}, {}}
+			w.Rich([]string{status.SubmissionDate, status.Problem, status.Language, status.Point, status.CodeLength, status.Result, status.ElapsedTime, status.Memory}, colors)
 		}
 		w.Render()
 
