@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/sachaos/ac-deck/lib/atcoder"
 	"github.com/sachaos/ac-deck/lib/files"
+	"github.com/sachaos/ac-deck/lib/status"
 	"github.com/sachaos/ac-deck/lib/tester"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -68,6 +69,18 @@ var submitCmd = &cobra.Command{
 		}
 
 		fmt.Println("Submit success!")
+		fmt.Println("Waiting for result...")
+
+		stat := status.NewStatus(ac)
+		err = stat.WaitFor(conf.AtCoder.ContestID)
+		if err != nil {
+			return err
+		}
+
+		err = stat.Render(conf.AtCoder.ContestID)
+		if err != nil {
+			return err
+		}
 
 		return nil
 	},
