@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/sachaos/atcoder/lib/tester"
+	"github.com/sachaos/ac-deck/lib/tester"
 	"github.com/spf13/cobra"
 )
 

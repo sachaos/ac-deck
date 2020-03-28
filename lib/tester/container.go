@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/sachaos/atcoder/lib/atcoder"
+	"github.com/sachaos/ac-deck/lib/atcoder"
 	"io/ioutil"
 	"os"
 	"path"
@@ -19,7 +19,7 @@ import (
 	"github.com/docker/docker/pkg/stdcopy"
 	"github.com/sirupsen/logrus"
 
-	"github.com/sachaos/atcoder/lib/files"
+	"github.com/sachaos/ac-deck/lib/files"
 )
 
 type ContainerTester struct {

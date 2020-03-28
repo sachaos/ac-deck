@@ -1,4 +1,4 @@
-# atcoder-cli
+# AC Deck
 
 Unofficial CLI for AtCoder users.
 
@@ -17,16 +17,16 @@ Unofficial CLI for AtCoder users.
 
 ## Linux
 
-Download binary from [Release page](https://github.com/sachaos/atcoder/releases)
+Download binary from [Release page](https://github.com/sachaos/ac-deck/releases)
 
 ```shell
-$ curl -L -o ./atcoder.tar.gz https://github.com/sachaos/atcoder/releases/download/v0.2.11/atcoder_0.2.11_Linux_x86_64.tar.gz && mkdir ./atcoder-bin && tar xvzf ./atcoder.tar.gz -C ./atcoder-bin && sudo mv ./atcoder-bin/atcoder /usr/local/bin/atcoder && sudo chmod +x /usr/local/bin/atcoder
+$ curl -L -o ./ac-deck.tar.gz https://github.com/sachaos/ac-deck/releases/download/v0.2.11/ac-deck_0.2.11_Linux_x86_64.tar.gz && mkdir ./ac-deck-bin && tar xvzf ./ac-deck.tar.gz -C ./ac-deck-bin && sudo mv ./ac-deck-bin/ac-deck /usr/local/bin/acd && sudo chmod +x /usr/local/bin/acd
 ```
 
 ## Mac OS X
 
 ```shell
-$ brew install sachaos/atcoder/atcoder
+$ brew install sachaos/ac-deck/ac-deck
 ```
 
 ## Build it yourself
@@ -34,8 +34,8 @@ $ brew install sachaos/atcoder/atcoder
 You need go 1.13.
 
 ```shell
-$ git clone https://github.com/sachaos/atcoder.git
-$ cd atcoder
+$ git clone https://github.com/sachaos/ac-deck.git
+$ cd ac-deck
 $ make install
 ```
 
@@ -44,16 +44,16 @@ $ make install
 ## Configure authentication information
 
 ```shell
-$ atcoder config
+$ acd config
 ```
 
-**WARNING**: This software store raw authentication information on `~/.atcoder.toml`. This is not secure.
+**WARNING**: This software store raw authentication information on `~/.ac-deck.toml`. This is not secure.
 Please understand this behavior, and use carefully. Please contribute if you interest to fix this behavior.
 
 ## Install test runnder
 
 ```shell
-$ atcoder install python3
+$ acd install python3
 ```
 
 # Usage
@@ -61,25 +61,25 @@ $ atcoder install python3
 ## Prepare to solve problems
 
 ```shell
-$ atcoder prepare abc153
+$ acd prepare abc153
 ```
 
 ### Specify language to solve
 
 ```shell
-$ atcoder prepare --language python3 abc153
+$ acd prepare --language python3 abc153
 ```
 
 ## Browse problem (on web browser)
 
 ```shell
-$ atcoder abc153/abc153_a browse
+$ acd abc153/abc153_a browse
 ```
 
 ## Edit code
 
 ```shell
-$ atcoder abc153/abc153_a edit
+$ acd abc153/abc153_a edit
 ```
 
 You can customize the editor by `$EDITOR` environment variable.
@@ -87,19 +87,19 @@ You can customize the editor by `$EDITOR` environment variable.
 ## Test
 
 ```shell
-$ atcoder abc153/abc153_a test
+$ acd abc153/abc153_a test
 ```
 
 ## Submit if test passed
 
 ```shell
-$ atcoder abc153/abc153_a submit
+$ acd abc153/abc153_a submit
 ```
 
 ### Submit without test
 
 ```shell
-$ atcoder abc153/abc153_a submit --skip-test
+$ acd abc153/abc153_a submit --skip-test
 ```
 
 ## Supporting Language

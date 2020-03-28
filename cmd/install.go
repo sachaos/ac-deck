@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/docker/docker/client"
-	"github.com/sachaos/atcoder/lib/environment"
-	"github.com/sachaos/atcoder/lib/tester"
+	"github.com/sachaos/ac-deck/lib/environment"
+	"github.com/sachaos/ac-deck/lib/tester"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +18,7 @@ var installCmd = &cobra.Command{
 		language := args[0]
 
 		if !validateLanguage(language) {
-			fmt.Println("Please specify supported language. Refer `atcoder languages`.")
+			fmt.Println("Please specify supported language. Refer `acd languages`.")
 			return fmt.Errorf("invalid language")
 		}
 

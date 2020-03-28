@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/olekukonko/tablewriter"
-	"github.com/sachaos/atcoder/lib/environment"
+	"github.com/sachaos/ac-deck/lib/environment"
 	"github.com/spf13/cobra"
 	"os"
 	"strings"

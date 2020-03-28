@@ -1,4 +1,4 @@
-module github.com/sachaos/atcoder
+module github.com/sachaos/ac-deck
 
 go 1.13
 

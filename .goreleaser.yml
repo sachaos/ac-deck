@@ -11,7 +11,7 @@ builds:
   goarch:
   - amd64
   ldflags:
-  - -s -w -X github.com/sachaos/atcoder/cmd.version={{.Version}}
+  - -s -w -X github.com/sachaos/ac-deck/cmd.version={{.Version}}
 archives:
 - replacements:
     darwin: Darwin
@@ -32,10 +32,10 @@ changelog:
 brews:
 - github:
     owner: sachaos
-    name: homebrew-atcoder
+    name: homebrew-ac-deck
   folder: Formula
-  homepage: https://github.com/sachaos/atcoder
+  homepage: https://github.com/sachaos/ac-deck
   description: Unofficial CLI for AtCoder users
   skip_upload: auto
   test: |
-    system "#{bin}/atcoder", "--version"
+    system "#{bin}/ac-deck", "--version"

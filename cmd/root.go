@@ -12,14 +12,14 @@ import (
 )
 
 var cfgFile string
-var confName = ".atcoder.toml"
+var confName = ".ac-deck.toml"
 var debugFlag bool
 var version string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "atcoder",
-	Short: "Unofficial CLI for AtCoder users",
+	Use:   "acd",
+	Short: "AC Deck: Unofficial CLI for AtCoder users",
 	Version: version,
 }
 
@@ -99,7 +99,7 @@ func initConfig() {
 	err := viper.ReadInConfig()
 	if err != nil && !isConfigCommand(os.Args) {
 		fmt.Println(err)
-		fmt.Println("Please run `atcoder config`.")
+		fmt.Println("Please run `acd config`.")
 		os.Exit(1)
 	}
 }

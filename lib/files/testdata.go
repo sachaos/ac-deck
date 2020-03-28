@@ -1,7 +1,7 @@
 package files
 
 import (
-	"github.com/sachaos/atcoder/lib/atcoder"
+	"github.com/sachaos/ac-deck/lib/atcoder"
 	"gopkg.in/yaml.v2"
 	"os"
 	"path"

@@ -1,6 +1,6 @@
 package main
 
-import "github.com/sachaos/atcoder/cmd"
+import "github.com/sachaos/ac-deck/cmd"
 
 //go:generate statik -f -src=templates
 

@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/sachaos/atcoder/lib/atcoder"
-	"github.com/sachaos/atcoder/lib/files"
-	"github.com/sachaos/atcoder/lib/tester"
+	"github.com/sachaos/ac-deck/lib/atcoder"
+	"github.com/sachaos/ac-deck/lib/files"
+	"github.com/sachaos/ac-deck/lib/tester"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
