@@ -62,6 +62,16 @@ func (ac *AtCoder) Login(name, password string) error {
 	return nil
 }
 
+func (ac *AtCoder) Status(contest string) ([]*Status, error) {
+	submissionsURL := fmt.Sprintf("%s/contests/%s/submissions/me", BASE_URL, contest)
+	get, err := ac.client.Get(submissionsURL)
+	if err != nil {
+		return nil, err
+	}
+
+	return ParseSubmissions(get.Body)
+}
+
 func (ac *AtCoder) FetchContest(contest string) (*Contest, error) {
 	contestURL := BASE_URL + "/contests/" + contest
 	res, err := ac.client.Get(contestURL + "/tasks")

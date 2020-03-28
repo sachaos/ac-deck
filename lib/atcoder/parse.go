@@ -79,3 +79,44 @@ func ParseCSRFToken(r io.Reader) (string, error) {
 
 	return token, nil
 }
+
+func ParseSubmissions(r io.Reader) ([]*Status, error) {
+	doc, err := goquery.NewDocumentFromReader(r)
+	if err != nil {
+		return nil, err
+	}
+
+	statuses := []*Status{}
+	selector := doc.Find(".panel-submission > .table-responsive > table > tbody > tr")
+	selector.Each(func(_ int, selection *goquery.Selection) {
+		timeEl := selection.Find("td:nth-child(1) > time")
+		problemEl := selection.Find("td:nth-child(2) > a")
+		langEl := selection.Find("td:nth-child(4)")
+		pointEl := selection.Find("td:nth-child(5)")
+		codeLengthEl := selection.Find("td:nth-child(6)")
+		resultEl := selection.Find("td:nth-child(7)")
+
+		_, exists := resultEl.Attr("colspan")
+
+		var elapsedTime string
+		var memory string
+		if !exists {
+			elapsedTime = selection.Find("td:nth-child(8)").Text()
+			memory = selection.Find("td:nth-child(9)").Text()
+		}
+		result := strings.TrimSpace(resultEl.Text())
+
+		statuses = append(statuses, &Status{
+			SubmissionDate: timeEl.Text(),
+			Problem:        problemEl.Text(),
+			Language:       langEl.Text(),
+			Point:          pointEl.Text(),
+			CodeLength:     codeLengthEl.Text(),
+			Result:         result,
+			ElapsedTime:    elapsedTime,
+			Memory:         memory,
+		})
+	})
+
+	return statuses, nil
+}
