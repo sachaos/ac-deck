@@ -1,24 +1,24 @@
 package status
 
 import (
+	"fmt"
 	"github.com/olekukonko/tablewriter"
 	"github.com/sachaos/ac-deck/lib/atcoder"
-	"log"
 	"os"
 	"sort"
 	"strings"
 	"time"
 )
 
-type Status struct {
+type StatusMonitor struct {
 	ac *atcoder.AtCoder
 }
 
-func NewStatus(ac *atcoder.AtCoder) *Status {
-	return &Status{ac: ac}
+func NewStatus(ac *atcoder.AtCoder) *StatusMonitor {
+	return &StatusMonitor{ac: ac}
 }
 
-func (s Status) WaitFor(contestId string) error {
+func (s StatusMonitor) WaitFor(contestId string) error {
 	for {
 		statuses, err := s.ac.Status(contestId)
 		if err != nil {
@@ -26,7 +26,7 @@ func (s Status) WaitFor(contestId string) error {
 		}
 
 		result := statuses[0].Result
-		log.Printf("result: %s", result)
+		fmt.Printf("%s\n", result)
 		if strings.Index(result, "/") > 0 || result == "WJ" {
 			time.Sleep(2 * time.Second)
 		} else {
@@ -35,17 +35,25 @@ func (s Status) WaitFor(contestId string) error {
 	}
 }
 
-func (s Status) Render(contestId string) error {
+func (s StatusMonitor) Render(contestId string) error {
 	statuses, err := s.ac.Status(contestId)
 	if err != nil {
 		return err
 	}
 
-	w := tablewriter.NewWriter(os.Stdout)
-	w.SetHeader([]string{"submission date", "problem", "language", "score", "code length", "result", "elapsed time", "memory"})
 	sort.Slice(statuses, func(i, j int) bool {
 		return statuses[i].SubmissionDate < statuses[j].SubmissionDate
 	})
+
+	render(statuses)
+
+	return nil
+}
+
+func render(statuses []*atcoder.Status) error {
+	w := tablewriter.NewWriter(os.Stdout)
+	w.SetHeader([]string{"submission date", "problem", "language", "score", "code length", "result", "elapsed time", "memory"})
+
 	for _, status := range statuses {
 		var resultColor tablewriter.Colors
 		switch status.Result {
@@ -72,6 +80,5 @@ func (s Status) Render(contestId string) error {
 		w.Rich([]string{status.SubmissionDate, status.Problem, status.Language, status.Point, status.CodeLength, status.Result, status.ElapsedTime, status.Memory}, colors)
 	}
 	w.Render()
-
 	return nil
 }

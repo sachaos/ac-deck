@@ -69,7 +69,6 @@ var submitCmd = &cobra.Command{
 		}
 
 		fmt.Println("Submit success!")
-		fmt.Println("Waiting for result...")
 
 		stat := status.NewStatus(ac)
 		err = stat.WaitFor(conf.AtCoder.ContestID)
