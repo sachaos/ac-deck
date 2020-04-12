@@ -57,15 +57,15 @@ var Environments = map[string]*Environment{
 	},
 	"python3": {
 		Key:          "python3",
-		Language:     "Python3 (3.4.3)",
+		Language:     "Python3 (3.8.2)",
 		SrcName:      "main.py",
 		Template:     "internal/python3/main.py",
-		LanguageCode: "3023",
+		LanguageCode: "4006",
 
 		Cmd: "python3 -B main.py",
 
 		CmdOnDocker: "python -B main.py",
-		DockerImage: "docker.io/sachaos/atcoder-python3:latest",
+		DockerImage: "docker.io/library/python:3.8.2",
 	},
 	"python2": {
 		Key:          "python2",
