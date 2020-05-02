@@ -3,7 +3,7 @@ package tester
 import (
 	"context"
 	"fmt"
-	"github.com/sachaos/atcoder/lib/atcoder"
+	"github.com/sachaos/ac-deck/lib/atcoder"
 	"io"
 	"io/ioutil"
 	"os"
@@ -14,7 +14,7 @@ import (
 	"github.com/gookit/color"
 	"github.com/sirupsen/logrus"
 
-	"github.com/sachaos/atcoder/lib/files"
+	"github.com/sachaos/ac-deck/lib/files"
 )
 
 type Result struct {

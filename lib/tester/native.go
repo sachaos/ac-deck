@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/sachaos/atcoder/lib/atcoder"
+	"github.com/sachaos/ac-deck/lib/atcoder"
 	"io"
 	"os"
 	"os/exec"
@@ -12,7 +12,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/sachaos/atcoder/lib/files"
+	"github.com/sachaos/ac-deck/lib/files"
 )
 
 type NativeTester struct {

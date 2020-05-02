@@ -1,4 +1,4 @@
-module github.com/sachaos/atcoder
+module github.com/sachaos/ac-deck
 
 go 1.13
 
@@ -28,7 +28,8 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.6.2
 	github.com/stretchr/testify v1.3.0
-	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
+	github.com/tj/go-spin v1.1.0
+	golang.org/x/crypto v0.0.0-20200406173513-056763e48d71
 	golang.org/x/net v0.0.0-20200219183655-46282727080f // indirect
 	golang.org/x/sys v0.0.0-20200219091948-cb0a6d8edb6c // indirect
 	gopkg.in/yaml.v2 v2.2.8

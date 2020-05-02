@@ -2,7 +2,7 @@ package files
 
 import (
 	"github.com/pelletier/go-toml"
-	"github.com/sachaos/atcoder/lib/environment"
+	"github.com/sachaos/ac-deck/lib/environment"
 	"os"
 	"path"
 )

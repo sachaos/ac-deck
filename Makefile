@@ -1,6 +1,6 @@
 .PHONY: prepare build install
 
-BUILD_OPTION=-ldflags "-X github.com/sachaos/atcoder/cmd.version=${VERSION}"
+BUILD_OPTION=-o acd -ldflags "-X github.com/sachaos/ac-deck/cmd.version=${VERSION}"
 
 prepare:
 	go get github.com/rakyll/statik
@@ -9,8 +9,8 @@ prepare:
 build: prepare
 	go build $(BUILD_OPTION)
 
-install: prepare
-	go install $(BUILD_OPTION)
+install: build
+	mv acd /usr/local/bin
 
 test: prepare
 	go test ./...

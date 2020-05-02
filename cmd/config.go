@@ -15,7 +15,7 @@ import (
 // configCmd represents the config command
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Configure atcoder-cli",
+	Short: "Configure ac-deck",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var username, password, language string
 		fmt.Printf("username: ")
@@ -24,7 +24,7 @@ var configCmd = &cobra.Command{
 		bytePassword, _ := terminal.ReadPassword(int(syscall.Stdin))
 		password = string(bytePassword)
 		fmt.Printf("\n")
-		fmt.Printf("language (list supported languages by `atcoder languages`): ")
+		fmt.Printf("language (list supported languages by `acd languages`): ")
 		fmt.Scanf("%s", &language)
 
 		viper.Set("username", username)
@@ -32,7 +32,7 @@ var configCmd = &cobra.Command{
 		viper.Set("language", language)
 
 		if !validateLanguage(language) {
-			fmt.Println("Please specify supported language. Refer `atcoder languages`.")
+			fmt.Println("Please specify supported language. Refer `acd languages`.")
 			return fmt.Errorf("invalid language")
 		}
 

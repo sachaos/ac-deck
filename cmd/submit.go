@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/sachaos/atcoder/lib/atcoder"
-	"github.com/sachaos/atcoder/lib/files"
-	"github.com/sachaos/atcoder/lib/tester"
+	"github.com/sachaos/ac-deck/lib/atcoder"
+	"github.com/sachaos/ac-deck/lib/files"
+	"github.com/sachaos/ac-deck/lib/status"
+	"github.com/sachaos/ac-deck/lib/tester"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
@@ -68,6 +69,20 @@ var submitCmd = &cobra.Command{
 		}
 
 		fmt.Println("Submit success!")
+		fmt.Println()
+
+		stat := status.NewStatus(ac)
+		err = stat.WaitFor(conf.AtCoder.ContestID)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println()
+
+		err = stat.Render(conf.AtCoder.ContestID)
+		if err != nil {
+			return err
+		}
 
 		return nil
 	},

@@ -12,7 +12,7 @@ import (
 	"path"
 )
 
-func init()  {
+func init() {
 	logrus.SetOutput(os.Stderr)
 	logrus.SetLevel(logrus.DebugLevel)
 }
@@ -62,6 +62,16 @@ func (ac *AtCoder) Login(name, password string) error {
 	return nil
 }
 
+func (ac *AtCoder) Status(contest string) ([]*Status, error) {
+	submissionsURL := fmt.Sprintf("%s/contests/%s/submissions/me", BASE_URL, contest)
+	get, err := ac.client.Get(submissionsURL)
+	if err != nil {
+		return nil, err
+	}
+
+	return ParseSubmissions(get.Body)
+}
+
 func (ac *AtCoder) FetchContest(contest string) (*Contest, error) {
 	contestURL := BASE_URL + "/contests/" + contest
 	res, err := ac.client.Get(contestURL + "/tasks")
@@ -71,6 +81,16 @@ func (ac *AtCoder) FetchContest(contest string) (*Contest, error) {
 	defer res.Body.Close()
 
 	paths, err := ParseTasksPage(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	xres, err := ac.client.Get(contestURL + "/submit")
+	if err != nil {
+		return nil, err
+	}
+
+	version, err := ParseLangVersion(xres.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -94,9 +114,10 @@ func (ac *AtCoder) FetchContest(contest string) (*Contest, error) {
 	}
 
 	return &Contest{
-		ID:    contest,
-		URL:   contestURL,
-		Tasks: tasks,
+		ID:      contest,
+		URL:     contestURL,
+		Tasks:   tasks,
+		LangVer: version,
 	}, nil
 }
 

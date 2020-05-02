@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/sachaos/atcoder/lib/atcoder"
-	"github.com/sachaos/atcoder/lib/environment"
-	"github.com/sachaos/atcoder/lib/preparer"
+	"github.com/sachaos/ac-deck/lib/environment"
+	"github.com/sachaos/ac-deck/lib/preparer"
+	"github.com/sachaos/ac-deck/lib/atcoder"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -23,7 +23,7 @@ var prepareCmd = &cobra.Command{
 		contestId := args[0]
 
 		if !validateLanguage(language) {
-			fmt.Println("Please specify supported language. Refer `atcoder languages`.")
+			fmt.Println("Please specify supported language. Refer `acd languages`.")
 			return fmt.Errorf("invalid language")
 		}
 
@@ -44,7 +44,14 @@ var prepareCmd = &cobra.Command{
 			return err
 		}
 
-		return preparer.Prepare(contest, ".", environment.DefaultEnvironmentSelector.Select(language))
+		var selector *environment.EnvironmentSelector
+		if contest.LangVer == atcoder.LangOld {
+			selector = environment.DefaultOldEnvironmentSelector
+		} else {
+			selector = environment.DefaultEnvironmentSelector
+		}
+
+		return preparer.Prepare(contest, ".", selector.Select(language))
 	},
 }
 
