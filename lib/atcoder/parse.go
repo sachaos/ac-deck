@@ -80,6 +80,31 @@ func ParseCSRFToken(r io.Reader) (string, error) {
 	return token, nil
 }
 
+func ParseLangVersion(r io.Reader) (string, error) {
+	doc, err := goquery.NewDocumentFromReader(r)
+	if err != nil {
+		return "", err
+	}
+
+	var result string
+	doc.Find("option").Each(func(_ int, selection *goquery.Selection) {
+		val, _ := selection.Attr("value")
+		if val == "3001" {
+			result = LangOld
+		}
+
+		if val == "4001" {
+			result = LangNew
+		}
+	})
+
+	if result == "" {
+		return "", fmt.Errorf("cannot detect lang")
+	}
+
+	return result, nil
+}
+
 func ParseSubmissions(r io.Reader) ([]*Status, error) {
 	doc, err := goquery.NewDocumentFromReader(r)
 	if err != nil {

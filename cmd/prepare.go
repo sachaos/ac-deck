@@ -23,7 +23,7 @@ var prepareCmd = &cobra.Command{
 		contestId := args[0]
 
 		if !validateLanguage(language) {
-			fmt.Println("Please specify supported language. Refer `ac-deck languages`.")
+			fmt.Println("Please specify supported language. Refer `acd languages`.")
 			return fmt.Errorf("invalid language")
 		}
 
@@ -44,7 +44,14 @@ var prepareCmd = &cobra.Command{
 			return err
 		}
 
-		return preparer.Prepare(contest, ".", environment.DefaultEnvironmentSelector.Select(language))
+		var selector *environment.EnvironmentSelector
+		if contest.LangVer == atcoder.LangOld {
+			selector = environment.DefaultOldEnvironmentSelector
+		} else {
+			selector = environment.DefaultEnvironmentSelector
+		}
+
+		return preparer.Prepare(contest, ".", selector.Select(language))
 	},
 }
 

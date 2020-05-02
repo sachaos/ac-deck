@@ -1,9 +1,13 @@
 package atcoder
 
+const LangNew = "lang"
+const LangOld = "oldLang"
+
 type Contest struct {
-	ID    string
-	URL   string
-	Tasks []*Task
+	ID      string
+	URL     string
+	LangVer string
+	Tasks   []*Task
 }
 
 type Task struct {

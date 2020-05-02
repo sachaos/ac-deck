@@ -12,7 +12,7 @@ import (
 	"path"
 )
 
-func init()  {
+func init() {
 	logrus.SetOutput(os.Stderr)
 	logrus.SetLevel(logrus.DebugLevel)
 }
@@ -85,6 +85,16 @@ func (ac *AtCoder) FetchContest(contest string) (*Contest, error) {
 		return nil, err
 	}
 
+	xres, err := ac.client.Get(contestURL + "/submit")
+	if err != nil {
+		return nil, err
+	}
+
+	version, err := ParseLangVersion(xres.Body)
+	if err != nil {
+		return nil, err
+	}
+
 	tasks := make([]*Task, len(paths))
 	for i, p := range paths {
 		taskURL := BASE_URL + p
@@ -104,9 +114,10 @@ func (ac *AtCoder) FetchContest(contest string) (*Contest, error) {
 	}
 
 	return &Contest{
-		ID:    contest,
-		URL:   contestURL,
-		Tasks: tasks,
+		ID:      contest,
+		URL:     contestURL,
+		Tasks:   tasks,
+		LangVer: version,
 	}, nil
 }
 
