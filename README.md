@@ -104,7 +104,15 @@ $ acd abc153/abc153_a submit --skip-test
 
 ## Supporting Language
 
-[AtCoder Languages and Compiler options](https://language-test-201603.contest.atcoder.jp/)
+[AtCoder Languages and Compiler options](https://atcoder.jp/contests/language-test-202001)
+
+- Python3 (3.8.2)
+- Go (1.14.1)
+    - You cannot use gonum, gods now.
+
+### Old versions
+
+[AtCoder Languages and Compiler options (Old)](https://language-test-201603.contest.atcoder.jp/)
 
 - C++14 (GCC 5.4.1)
 - C++ (GCC 5.4.1)
