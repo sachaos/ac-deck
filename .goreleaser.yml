@@ -4,6 +4,7 @@ before:
 builds:
 - env:
   - CGO_ENABLED=0
+  binary: acd
   goos:
   - darwin
   - linux
@@ -32,10 +33,10 @@ changelog:
 brews:
 - github:
     owner: sachaos
-    name: homebrew-ac-deck
+    name: homebrew-tap
   folder: Formula
   homepage: https://github.com/sachaos/ac-deck
   description: Unofficial CLI for AtCoder users
   skip_upload: auto
   test: |
-    system "#{bin}/ac-deck", "--version"
+    system "#{bin}/acd", "--version"
