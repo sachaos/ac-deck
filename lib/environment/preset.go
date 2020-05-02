@@ -1,15 +1,18 @@
 package environment
 
-
-var Aliases = map[string]string {
+var OldAliases = map[string]string {
 	"c++": "c++_gcc",
 	"c++14": "c++14_gcc",
 	"c": "c_gcc",
 	"python": "python3",
 }
 
+var Aliases = map[string]string {
+	"python": "python3",
+}
+
 // NOTE: https://language-test-201603.contest.atcoder.jp/
-var Environments = map[string]*Environment{
+var OldEnvironments = map[string]*Environment{
 	"c++14_gcc": {
 		Key:          "c++14_gcc",
 		Language:     "C++14 (GCC 5.4.1)",
@@ -149,6 +152,37 @@ var Environments = map[string]*Environment{
 		DockerImage:      "docker.io/library/mono:4.6.2",
 		BuildCmdOnDocker: "mcs -warn:0 -o+ -r:System.Numerics Main.cs",
 		CmdOnDocker:      "mono Main.exe",
+	},
+}
+
+// NOTE: https://atcoder.jp/contests/language-test-202001
+var Environments = map[string]*Environment{
+	"go": {
+		Key:          "go",
+		Language:     "Go (1.14.1)",
+		SrcName:      "main.go",
+		Template:     "internal/go/main.go",
+		LanguageCode: "4026",
+
+		BuildCmd: "go build -o ./a.out main.go",
+		Cmd:      "./a.out",
+		CleanCmd: "rm ./a.out",
+
+		DockerImage:      "docker.io/library/golang:1.14.1",
+		BuildCmdOnDocker: "go build -o a.out main.go",
+		CmdOnDocker:      "./a.out",
+	},
+	"python3": {
+		Key:          "python3",
+		Language:     "Python3 (3.8.2)",
+		SrcName:      "main.py",
+		Template:     "internal/python3/main.py",
+		LanguageCode: "4006",
+
+		Cmd: "python3 -B main.py",
+
+		CmdOnDocker: "python -B main.py",
+		DockerImage: "docker.io/library/python:3.8.2",
 	},
 }
 
