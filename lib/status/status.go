@@ -2,8 +2,10 @@ package status
 
 import (
 	"fmt"
+	"github.com/gookit/color"
 	"github.com/olekukonko/tablewriter"
 	"github.com/sachaos/ac-deck/lib/atcoder"
+	"github.com/tj/go-spin"
 	"os"
 	"sort"
 	"strings"
@@ -19,6 +21,28 @@ func NewStatus(ac *atcoder.AtCoder) *StatusMonitor {
 }
 
 func (s StatusMonitor) WaitFor(contestId string) error {
+	done := make(chan struct{})
+	resultC := make(chan string)
+	go func() {
+		s := spin.New()
+		var result string
+		for {
+			select {
+			case r := <-resultC:
+				result = r
+			case <-done:
+				fmt.Printf("\r"+ color.Bold.Sprintf("Judging: ") + "%s DONE\n", result)
+				return
+			default:
+				fmt.Printf("\r"+ color.Bold.Sprintf("Judging: ") + "%s %s", result, s.Next())
+				time.Sleep(100 * time.Millisecond)
+			}
+		}
+	}()
+	defer func() {
+		done <- struct{}{}
+	}()
+
 	for {
 		statuses, err := s.ac.Status(contestId)
 		if err != nil {
@@ -26,7 +50,7 @@ func (s StatusMonitor) WaitFor(contestId string) error {
 		}
 
 		result := statuses[0].Result
-		fmt.Printf("%s\n", result)
+		resultC <- result
 		if strings.Index(result, "/") > 0 || result == "WJ" {
 			time.Sleep(2 * time.Second)
 		} else {
