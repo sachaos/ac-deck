@@ -5,6 +5,6 @@ RUN pip install numpy==1.18.2
 RUN pip install scipy==1.4.1
 RUN pip install numba==0.48.0
 RUN pip install networkx==2.4
-RUN pip install sklearn==0.22.2.post1
+RUN pip install scikit-learn==0.22.2.post1
 
 CMD ["python"]
