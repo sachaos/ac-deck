@@ -24,7 +24,7 @@ var OldEnvironments = map[string]*Environment{
 		Cmd:      "./a.out",
 		CleanCmd: "rm ./a.out",
 
-		DockerImage:      "docker.io/sachaos/atcoder-gcc:latest",
+		DockerImage:      "docker.io/sachaos/atcoder-gcc-old:latest",
 		BuildCmdOnDocker: "g++ -std=gnu++1y -I /opt/boost/boost_1_60_0 -L /opt/boost/boost_1_60_0 -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 	},
@@ -39,7 +39,7 @@ var OldEnvironments = map[string]*Environment{
 		Cmd:      "./a.out",
 		CleanCmd: "rm ./a.out",
 
-		DockerImage:      "docker.io/sachaos/atcoder-gcc:latest",
+		DockerImage:      "docker.io/sachaos/atcoder-gcc-old:latest",
 		BuildCmdOnDocker: "g++ -std=gnu++03 -I /opt/boost/boost_1_60_0 -L /opt/boost/boost_1_60_0 -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 	},
@@ -131,11 +131,11 @@ var OldEnvironments = map[string]*Environment{
 		Template:     "internal/c/main.c",
 		LanguageCode: "3004",
 
-		BuildCmd: "gcc -std=gnu11 -O2 -o a.out main.c -lm",
+		BuildCmd: "gcc-old -std=gnu11 -O2 -o a.out main.c -lm",
 		Cmd:      "./a.out",
 
-		DockerImage:      "docker.io/sachaos/atcoder-gcc:latest",
-		BuildCmdOnDocker: "gcc -std=gnu11 -O2 -o a.out main.c -lm",
+		DockerImage:      "docker.io/sachaos/atcoder-gcc-old:latest",
+		BuildCmdOnDocker: "gcc-old -std=gnu11 -O2 -o a.out main.c -lm",
 		CmdOnDocker:      "./a.out",
 	},
 	"c#": {
@@ -157,6 +157,21 @@ var OldEnvironments = map[string]*Environment{
 
 // NOTE: https://atcoder.jp/contests/language-test-202001
 var Environments = map[string]*Environment{
+	"c++_gcc": {
+		Key:          "c++_gcc",
+		Language:     "C++ (GCC 9.2.1)",
+		SrcName:      "main.cpp",
+		Template:     "internal/c++/main.cpp",
+		LanguageCode: "4003",
+
+		BuildCmd: "g++ -std=gnu++17 -O2 -o a.out main.cpp",
+		Cmd:      "./a.out",
+		CleanCmd: "rm ./a.out",
+
+		DockerImage:      "docker.io/sachaos/atcoder-gcc:latest",
+		BuildCmdOnDocker: "g++ -std=gnu++17 -Wall -Wextra -I /opt/boost/boost_1_72_0 -L /opt/boost/boost_1_72_0 -O2 -o a.out main.cpp",
+		CmdOnDocker:      "./a.out",
+	},
 	"go": {
 		Key:          "go",
 		Language:     "Go (1.14.1)",
