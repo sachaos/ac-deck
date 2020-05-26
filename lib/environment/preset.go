@@ -9,6 +9,7 @@ var OldAliases = map[string]string {
 
 var Aliases = map[string]string {
 	"python": "python3",
+	"c++": "c++_gcc",
 }
 
 // NOTE: https://language-test-201603.contest.atcoder.jp/
