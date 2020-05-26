@@ -1,4 +1,4 @@
-FROM gcc:9.2.1
+FROM gcc:9.2
 
 RUN apt-get update -y && apt-get upgrade -y
 
