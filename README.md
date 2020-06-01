@@ -26,7 +26,7 @@ $ curl -L -o ./ac-deck.tar.gz https://github.com/sachaos/ac-deck/releases/downlo
 ## Mac OS X
 
 ```shell
-$ brew install sachaos/ac-deck/ac-deck
+$ brew install sachaos/tap/ac-deck
 ```
 
 ## Build it yourself
