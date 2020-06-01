@@ -19,6 +19,7 @@ var prepareCmd = &cobra.Command{
 		username := viper.GetString("username")
 		password := viper.GetString("password")
 		language := viper.GetString("language")
+		templatePath := viper.GetString("template")
 
 		contestId := args[0]
 
@@ -26,8 +27,6 @@ var prepareCmd = &cobra.Command{
 			fmt.Println("Please specify supported language. Refer `acd languages`.")
 			return fmt.Errorf("invalid language")
 		}
-
-		fmt.Printf("Using template of %s\n", language)
 
 		ac, err := atcoder.NewAtCoder()
 		if err != nil {
@@ -51,7 +50,7 @@ var prepareCmd = &cobra.Command{
 			selector = environment.DefaultEnvironmentSelector
 		}
 
-		return preparer.Prepare(contest, ".", selector.Select(language))
+		return preparer.Prepare(contest, ".", selector.Select(language), templatePath)
 	},
 }
 
@@ -59,4 +58,7 @@ func init() {
 	rootCmd.AddCommand(prepareCmd)
 	prepareCmd.Flags().StringP("language", "l", "", "language")
 	viper.BindPFlag("language", prepareCmd.Flags().Lookup("language"))
+
+	prepareCmd.Flags().StringP("template", "t", "", "template file path")
+	viper.BindPFlag("template", prepareCmd.Flags().Lookup("template"))
 }

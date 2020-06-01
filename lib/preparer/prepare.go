@@ -65,8 +65,17 @@ func prepareTemplate(p string) (*template.Template, error) {
 	return template.New("src").Parse(string(all))
 }
 
-func Prepare(contest *atcoder.Contest, dir string, env *environment.Environment) error {
-	template, err := prepareTemplate(env.Template)
+func Prepare(contest *atcoder.Contest, dir string, env *environment.Environment, specifiedTemplatePath string) error {
+	var templatePath string
+	if specifiedTemplatePath == "" {
+		fmt.Printf("Using template of %s\n", env.Language)
+		templatePath = env.Template
+	} else {
+		fmt.Printf("Using local template: %s\n", specifiedTemplatePath)
+		templatePath = specifiedTemplatePath
+	}
+
+	template, err := prepareTemplate(templatePath)
 	if err != nil {
 		return err
 	}
