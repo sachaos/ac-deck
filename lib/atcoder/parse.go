@@ -29,7 +29,7 @@ func ParseTaskPage(r io.Reader) (*Task, error) {
 		return nil, err
 	}
 
-	selector := doc.Find("span.lang-ja .part > section > h3")
+	selector := doc.Find(".part > section > h3")
 	if selector.Length() == 0 {
 		return nil, fmt.Errorf("examples not found")
 	}
