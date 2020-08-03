@@ -20,7 +20,7 @@ Unofficial CLI for AtCoder users.
 Download binary from [Release page](https://github.com/sachaos/ac-deck/releases)
 
 ```shell
-$ curl -L -o ./ac-deck.tar.gz https://github.com/sachaos/ac-deck/releases/download/v0.2.11/ac-deck_0.2.11_Linux_x86_64.tar.gz && mkdir ./ac-deck-bin && tar xvzf ./ac-deck.tar.gz -C ./ac-deck-bin && sudo mv ./ac-deck-bin/ac-deck /usr/local/bin/acd && sudo chmod +x /usr/local/bin/acd
+$ curl -L -o ./ac-deck.tar.gz https://github.com/sachaos/ac-deck/releases/download/v0.3.4/ac-deck_0.3.4_Linux_x86_64.tar.gz && mkdir ./ac-deck-bin && tar xvzf ./ac-deck.tar.gz -C ./ac-deck-bin && sudo mv ./ac-deck-bin/acd /usr/local/bin/acd && sudo chmod +x /usr/local/bin/acd
 ```
 
 ## Mac OS X
