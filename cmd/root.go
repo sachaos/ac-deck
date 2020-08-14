@@ -97,7 +97,7 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	err := viper.ReadInConfig()
-	if err != nil && !isConfigCommand(os.Args) {
+	if err != nil && !isConfigCommand(os.Args) && !isLanguagesCommand(os.Args) {
 		fmt.Println(err)
 		fmt.Println("Please run `acd config`.")
 		os.Exit(1)
@@ -114,3 +114,12 @@ func isConfigCommand(args []string) bool {
 	return false
 }
 
+func isLanguagesCommand(args []string) bool {
+	for _, arg := range args {
+		if arg == "languages" {
+			return true
+		}
+	}
+
+	return false
+}
