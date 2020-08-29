@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -91,7 +92,7 @@ func judgeResult(index int, example *atcoder.Example, result *Result, duration t
 
 	fmt.Printf("\n")
 	fmt.Printf(color.Bold.Sprintf("Case %d: ", index+1))
-	passed := actualStr == example.Exp && result.ExitCode == 0
+	passed := judgeEquality(example.Exp, actualStr) && result.ExitCode == 0
 	if passed {
 		color.Green.Printf("AC\n")
 	} else {
@@ -118,3 +119,18 @@ func judgeResult(index int, example *atcoder.Example, result *Result, duration t
 
 	return passed, nil
 }
+
+func judgeEquality(example string, actual string) bool {
+	af, err := strconv.ParseFloat(actual, 64)
+	if err != nil {
+		return example == actual
+	}
+
+	ef, err := strconv.ParseFloat(example, 64)
+	if err != nil {
+		return example == actual
+	}
+
+	return (af - ef) / ef < 0.00001
+}
+
