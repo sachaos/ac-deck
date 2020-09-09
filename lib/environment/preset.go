@@ -26,7 +26,7 @@ var OldEnvironments = map[string]*Environment{
 		Cmd:      "./a.out",
 		CleanCmd: "rm ./a.out",
 
-		DockerImage:      "docker.io/sachaos/atcoder-gcc-old:latest",
+		DockerImage:      "ghcr.io/sachaos/atcoder-gcc-old:v1.0.0",
 		BuildCmdOnDocker: "g++ -std=gnu++1y -I /opt/boost/boost_1_60_0 -L /opt/boost/boost_1_60_0 -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 	},
@@ -41,7 +41,7 @@ var OldEnvironments = map[string]*Environment{
 		Cmd:      "./a.out",
 		CleanCmd: "rm ./a.out",
 
-		DockerImage:      "docker.io/sachaos/atcoder-gcc-old:latest",
+		DockerImage:      "ghcr.io/sachaos/atcoder-gcc-old:v1.0.0",
 		BuildCmdOnDocker: "g++ -std=gnu++03 -I /opt/boost/boost_1_60_0 -L /opt/boost/boost_1_60_0 -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 	},
@@ -70,7 +70,7 @@ var OldEnvironments = map[string]*Environment{
 		Cmd: "python3 -B main.py",
 
 		CmdOnDocker: "python -B main.py",
-		DockerImage: "docker.io/sachaos/atcoder-python3-old:latest",
+		DockerImage: "ghcr.io/sachaos/atcoder-python3-old:v1.0.0",
 	},
 	"python2": {
 		Key:          "python2",
@@ -81,7 +81,7 @@ var OldEnvironments = map[string]*Environment{
 
 		Cmd: "python2 -B main.py",
 
-		DockerImage: "docker.io/sachaos/atcoder-python2:latest",
+		DockerImage: "ghcr.io/sachaos/atcoder-python2:v1.0.0",
 		CmdOnDocker: "python -B main.py",
 	},
 	"ruby": {
@@ -136,7 +136,7 @@ var OldEnvironments = map[string]*Environment{
 		BuildCmd: "gcc-old -std=gnu11 -O2 -o a.out main.c -lm",
 		Cmd:      "./a.out",
 
-		DockerImage:      "docker.io/sachaos/atcoder-gcc-old:latest",
+		DockerImage:      "ghcr.io/sachaos/atcoder-gcc-old:v1.0.0",
 		BuildCmdOnDocker: "gcc-old -std=gnu11 -O2 -o a.out main.c -lm",
 		CmdOnDocker:      "./a.out",
 	},
@@ -170,7 +170,7 @@ var Environments = map[string]*Environment{
 		Cmd:      "./a.out",
 		CleanCmd: "rm ./a.out",
 
-		DockerImage:      "docker.io/sachaos/atcoder-gcc:latest",
+		DockerImage:      "ghcr.io/sachaos/atcoder-gcc:v1.0.0",
 		BuildCmdOnDocker: "g++ -std=gnu++17 -Wall -Wextra -I /opt/boost/boost_1_72_0 -L /opt/boost/boost_1_72_0 -I /opt/atcoder -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 	},
@@ -185,7 +185,7 @@ var Environments = map[string]*Environment{
 		Cmd:      "./a.out",
 		CleanCmd: "rm ./a.out",
 
-		DockerImage:      "docker.io/sachaos/atcoder-gcc:latest",
+		DockerImage:      "ghcr.io/sachaos/atcoder-gcc:v1.0.0",
 		BuildCmdOnDocker: "g++ -std=gnu++17 -Wall -Wextra -I /opt/boost/boost_1_72_0 -L /opt/boost/boost_1_72_0 -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 	},
@@ -214,7 +214,7 @@ var Environments = map[string]*Environment{
 		Cmd: "python3 -B main.py",
 
 		CmdOnDocker: "python -B main.py",
-		DockerImage: "docker.io/sachaos/atcoder-python3:latest",
+		DockerImage: "ghcr.io/sachaos/atcoder-python3:v1.0.0",
 	},
 }
 
