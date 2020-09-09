@@ -8,5 +8,6 @@ RUN tar xvzf boost.tar.gz -C /opt/boost
 
 RUN curl -Lo ac-library.zip https://img.atcoder.jp/practice2/ac-library.zip
 RUN unzip ac-library -d /opt/ac-library
+RUN rm -rf /opt/ac-library/document_en /opt/ac-library/document_ja /opt/ac-library/expander.py
 
 CMD ["bash"]
