@@ -10,6 +10,7 @@ var OldAliases = map[string]string {
 var Aliases = map[string]string {
 	"python": "python3",
 	"c++": "c++_gcc",
+	"c++_ac": "c++_gcc_with_ac_library_v1",
 }
 
 // NOTE: https://language-test-201603.contest.atcoder.jp/
@@ -158,6 +159,21 @@ var OldEnvironments = map[string]*Environment{
 
 // NOTE: https://atcoder.jp/contests/language-test-202001
 var Environments = map[string]*Environment{
+	"c++_gcc_with_ac_library_v1": {
+		Key:          "c++_gcc_with_atcoder",
+		Language:     "C++ (GCC 9.2.1 with AC Library v1.0)",
+		SrcName:      "main.cpp",
+		Template:     "internal/c++/main.cpp",
+		LanguageCode: "4101",
+
+		BuildCmd: "g++ -std=gnu++17 -O2 -o a.out main.cpp",
+		Cmd:      "./a.out",
+		CleanCmd: "rm ./a.out",
+
+		DockerImage:      "docker.io/sachaos/atcoder-gcc:latest",
+		BuildCmdOnDocker: "g++ -std=gnu++17 -Wall -Wextra -I /opt/boost/boost_1_72_0 -L /opt/boost/boost_1_72_0 -I /opt/atcoder -O2 -o a.out main.cpp",
+		CmdOnDocker:      "./a.out",
+	},
 	"c++_gcc": {
 		Key:          "c++_gcc",
 		Language:     "C++ (GCC 9.2.1)",

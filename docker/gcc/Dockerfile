@@ -6,4 +6,7 @@ RUN curl -Lo boost.tar.gz http://sourceforge.net/projects/boost/files/boost/1.72
 RUN mkdir -p /opt/boost/
 RUN tar xvzf boost.tar.gz -C /opt/boost
 
+RUN curl -Lo ac-library.zip https://img.atcoder.jp/practice2/ac-library.zip
+RUN unzip ac-library -d /opt/ac-library
+
 CMD ["bash"]
