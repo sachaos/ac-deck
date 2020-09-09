@@ -163,7 +163,7 @@ var Environments = map[string]*Environment{
 		Key:          "c++_gcc_with_atcoder",
 		Language:     "C++ (GCC 9.2.1 with AC Library v1.0)",
 		SrcName:      "main.cpp",
-		Template:     "internal/c++/main.cpp",
+		Template:     "internal/c++_ac_lib/main.cpp",
 		LanguageCode: "4101",
 
 		BuildCmd: "g++ -std=gnu++17 -O2 -o a.out main.cpp",
