@@ -22,6 +22,11 @@ func Test_judgeEquality(t *testing.T) {
 			expected: false,
 		},
 		{
+			example: "3000293",
+			actual: "3000292",
+			expected: false,
+		},
+		{
 			example:  "100",
 			actual:   "100",
 			expected: true,

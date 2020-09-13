@@ -125,6 +125,10 @@ func judgeEquality(example string, actual string) bool {
 		return true
 	}
 
+	if !strings.Contains(example, ".") {
+		return false
+	}
+
 	af, err := strconv.ParseFloat(actual, 64)
 	if err != nil {
 		return false
