@@ -12,8 +12,8 @@ func Test_judgeEquality(t *testing.T) {
 		expected bool
 	}{
 		{
-			example:  "hoge",
-			actual:   "hoge",
+			example:  "0",
+			actual:   "0",
 			expected: true,
 		},
 		{

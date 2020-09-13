@@ -121,14 +121,18 @@ func judgeResult(index int, example *atcoder.Example, result *Result, duration t
 }
 
 func judgeEquality(example string, actual string) bool {
+	if example == actual {
+		return true
+	}
+
 	af, err := strconv.ParseFloat(actual, 64)
 	if err != nil {
-		return example == actual
+		return false
 	}
 
 	ef, err := strconv.ParseFloat(example, 64)
 	if err != nil {
-		return example == actual
+		return false
 	}
 
 	return (af - ef) / ef < 0.00001
