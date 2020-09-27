@@ -202,6 +202,13 @@ func ExecWithStdin(ctx context.Context, cli *client.Client, name string, cmd []s
 		break
 
 	case <-ctx.Done():
+		if ctx.Err() == context.DeadlineExceeded {
+			return &ExecResult{
+				Stdout:   string(""),
+				Stderr:   string(""),
+				ExitCode: 200,
+			}, nil
+		}
 		return nil, ctx.Err()
 	}
 

@@ -95,6 +95,17 @@ func judgeResult(index int, example *atcoder.Example, result *Result, duration t
 	passed := judgeEquality(example.Exp, actualStr) && result.ExitCode == 0
 	if passed {
 		color.Green.Printf("AC\n")
+	} else if result.ExitCode == 200 {
+		color.Yellow.Printf("TLE\n")
+	} else if result.ExitCode != 0 {
+		color.Yellow.Printf("RE\n")
+		fmt.Printf("Input:\n")
+		fmt.Println(example.In)
+		fmt.Printf("\nExpected:\n")
+		fmt.Println(example.Exp)
+		fmt.Printf("\nActually:\n")
+		fmt.Println(actualStr)
+		fmt.Printf("\nExit with: %d\n", result.ExitCode)
 	} else {
 		color.Red.Printf("WA\n")
 		fmt.Printf("Input:\n")
