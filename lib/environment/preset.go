@@ -10,7 +10,7 @@ var OldAliases = map[string]string {
 var Aliases = map[string]string {
 	"python": "python3",
 	"c++": "c++_gcc",
-	"c++_ac": "c++_gcc_with_ac_library_v1",
+	"c++_ac": "c++_gcc_with_atcoder",
 }
 
 // NOTE: https://language-test-201603.contest.atcoder.jp/
@@ -159,7 +159,7 @@ var OldEnvironments = map[string]*Environment{
 
 // NOTE: https://atcoder.jp/contests/language-test-202001
 var Environments = map[string]*Environment{
-	"c++_gcc_with_ac_library_v1": {
+	"c++_gcc_with_atcoder": {
 		Key:          "c++_gcc_with_atcoder",
 		Language:     "C++ (GCC 9.2.1 with AC Library v1.0)",
 		SrcName:      "main.cpp",
