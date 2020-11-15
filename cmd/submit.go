@@ -14,6 +14,7 @@ import (
 
 var skipTest bool
 var noDocker bool
+var verbose bool
 
 // submitCmd represents the submit command
 var submitCmd = &cobra.Command{
@@ -28,7 +29,7 @@ var submitCmd = &cobra.Command{
 		dir := args[0]
 
 		if !skipTest {
-			allPassed, err := tester.RunTest(dir, !noDocker, timeout)
+			allPassed, err := tester.RunTest(dir, !noDocker, timeout, verbose)
 			if err != nil {
 				return err
 			}
@@ -92,5 +93,6 @@ func init() {
 	rootCmd.AddCommand(submitCmd)
 	submitCmd.Flags().BoolVarP(&skipTest, "skip-test", "s", false, "skip test")
 	submitCmd.Flags().BoolVar(&noDocker, "no-docker", false, "no docker")
+	submitCmd.Flags().BoolVar(&verbose, "verbose", false, "print result & expected")
 	submitCmd.Flags().IntVarP(&timeout, "timeout", "t", 3, "timeout (in second)")
 }

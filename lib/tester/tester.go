@@ -29,7 +29,7 @@ type Tester interface {
 	Clean(ctx context.Context) error
 }
 
-func RunTest(dir string, onContainer bool, timeout int) (bool, error) {
+func RunTest(dir string, onContainer bool, timeout int, verbose bool) (bool, error) {
 	conf, err := files.LoadConf(dir)
 	if err != nil {
 		return false, err
@@ -69,7 +69,7 @@ func RunTest(dir string, onContainer bool, timeout int) (bool, error) {
 		}
 		end := time.Now()
 
-		ok, err := judgeResult(index, example, result, end.Sub(start))
+		ok, err := judgeResult(index, example, result, end.Sub(start), verbose)
 		if err != nil {
 			return false, err
 		}
@@ -82,7 +82,7 @@ func RunTest(dir string, onContainer bool, timeout int) (bool, error) {
 	return all, nil
 }
 
-func judgeResult(index int, example *atcoder.Example, result *Result, duration time.Duration) (bool, error) {
+func judgeResult(index int, example *atcoder.Example, result *Result, duration time.Duration, verbose bool) (bool, error) {
 	actual, err := ioutil.ReadAll(result.Actual)
 	if err != nil {
 		return false, err
@@ -97,6 +97,9 @@ func judgeResult(index int, example *atcoder.Example, result *Result, duration t
 		color.Green.Printf("AC\n")
 	} else {
 		color.Red.Printf("WA\n")
+	}
+
+	if !passed || verbose {
 		fmt.Printf("Input:\n")
 		fmt.Println(example.In)
 		fmt.Printf("\nExpected:\n")
