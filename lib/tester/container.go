@@ -5,7 +5,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/sachaos/ac-deck/lib/atcoder"
-	"io/ioutil"
+	"io"
 	"os"
 	"path"
 	"strings"
@@ -59,15 +59,28 @@ func NewContainerTester(ctx context.Context, cli *client.Client, conf *files.Con
 	}, nil
 }
 
-func (t *ContainerTester) Run(ctx context.Context, index int, example *atcoder.Example) (*Result, error) {
-	r, err := ExecWithStdin(ctx, t.cli, t.containerId, strings.Split(t.conf.Environment.Cmd, " "), example.In)
+func (t *ContainerTester) Run(ctx context.Context, r io.Reader, w io.Writer, ew io.Writer) error {
+	result, err := ExecWithStdin(ctx, t.cli, t.containerId, strings.Split(t.conf.Environment.Cmd, " "), r)
+	if err != nil {
+		return err
+	}
+
+	io.Copy(w, result.Stdout)
+	io.Copy(ew, result.Stderr)
+
+	return nil
+}
+
+func (t *ContainerTester) Test(ctx context.Context, index int, example *atcoder.Example) (*Result, error) {
+	logrus.Debug("Running ContainerTester.Test")
+	r, err := ExecWithStdin(ctx, t.cli, t.containerId, strings.Split(t.conf.Environment.Cmd, " "), strings.NewReader(example.In + "\n"))
 	if err != nil {
 		return nil, err
 	}
 
 	return &Result{
-		Actual: bytes.NewBufferString(r.Stdout),
-		Log:    bytes.NewBufferString(r.Stderr),
+		Actual: r.Stdout,
+		Log:    r.Stderr,
 		ExitCode:  r.ExitCode,
 	}, nil
 }
@@ -140,17 +153,17 @@ func PrepareImage(cli *client.Client, ctx context.Context, imageName string) err
 }
 
 type ExecResult struct {
-	Stdout   string
-	Stderr   string
+	Stdout   io.Reader
+	Stderr   io.Reader
 	ExitCode int
 }
 
 func Exec(ctx context.Context, cli *client.Client, name string, cmd []string) (*ExecResult, error) {
-	return ExecWithStdin(ctx, cli, name, cmd, "")
+	return ExecWithStdin(ctx, cli, name, cmd, strings.NewReader(""))
 }
 
 // Ref: https://stackoverflow.com/questions/52774830/docker-exec-command-from-golang-api
-func ExecWithStdin(ctx context.Context, cli *client.Client, name string, cmd []string, stdin string) (*ExecResult, error) {
+func ExecWithStdin(ctx context.Context, cli *client.Client, name string, cmd []string, stdin io.Reader) (*ExecResult, error) {
 	logrus.Infof("running: %+v", cmd)
 	execConf := types.ExecConfig{
 		Cmd:          cmd,
@@ -176,14 +189,6 @@ func ExecWithStdin(ctx context.Context, cli *client.Client, name string, cmd []s
 	}
 	defer res.Close()
 
-	logrus.Debug("Sending input data")
-	if stdin != "" {
-		_, err = res.Conn.Write([]byte(stdin + "\n"))
-		if err != nil {
-			return nil, err
-		}
-	}
-
 	var outBuf, errBuf bytes.Buffer
 	outputDone := make(chan error)
 
@@ -192,6 +197,11 @@ func ExecWithStdin(ctx context.Context, cli *client.Client, name string, cmd []s
 		_, err = stdcopy.StdCopy(&outBuf, &errBuf, res.Reader)
 		logrus.Debug("Copy end")
 		outputDone <- err
+	}()
+
+	go func() {
+		logrus.Debug("Sending input data")
+		_, err = io.Copy(res.Conn, stdin)
 	}()
 
 	select {
@@ -205,28 +215,14 @@ func ExecWithStdin(ctx context.Context, cli *client.Client, name string, cmd []s
 		return nil, ctx.Err()
 	}
 
-	logrus.Debug("Load from outBuf")
-	stdout, err := ioutil.ReadAll(&outBuf)
-	if err != nil {
-		return nil, err
-	}
-	logrus.Debug("Load from errBuf")
-	stderr, err := ioutil.ReadAll(&errBuf)
-	if err != nil {
-		return nil, err
-	}
-
 	inspect, err := cli.ContainerExecInspect(ctx, exec.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	logrus.Debug(string(stdout))
-	logrus.Debug(string(stderr))
-
 	return &ExecResult{
-		Stdout:   string(stdout),
-		Stderr:   string(stderr),
+		Stdout:   &outBuf,
+		Stderr:   &errBuf,
 		ExitCode: inspect.ExitCode,
 	}, nil
 }

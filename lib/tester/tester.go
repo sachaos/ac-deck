@@ -19,14 +19,44 @@ import (
 )
 
 type Result struct {
-	Actual   io.ReadWriter
-	Log      io.ReadWriter
+	Actual   io.Reader
+	Log      io.Reader
 	ExitCode int
 }
 
 type Tester interface {
-	Run(ctx context.Context, index int, example *atcoder.Example) (*Result, error)
+	Run(ctx context.Context, r io.Reader, w io.Writer, ew io.Writer) error
+	Test(ctx context.Context, index int, example *atcoder.Example) (*Result, error)
 	Clean(ctx context.Context) error
+}
+
+func Run(dir string, r io.Reader, w io.Writer, ew io.Writer) error {
+	ctx := context.Background()
+	conf, err := files.LoadConf(dir)
+	if err != nil {
+		return err
+	}
+
+	cli, err := client.NewClientWithOpts(client.FromEnv)
+	if err != nil {
+		return err
+	}
+
+	tester, err := NewContainerTester(ctx, cli, conf, dir)
+	if err != nil {
+		return err
+	}
+
+	if err = tester.Run(ctx, r, w, ew); err != nil {
+		return err
+	}
+
+
+	if err = tester.Clean(ctx); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func RunTest(dir string, onContainer bool, timeout int, verbose bool) (bool, error) {
@@ -63,7 +93,7 @@ func RunTest(dir string, onContainer bool, timeout int, verbose bool) (bool, err
 	for index, example := range examples {
 		ctx, _ := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
 		start := time.Now()
-		result, err := tester.Run(ctx, index, example)
+		result, err := tester.Test(ctx, index, example)
 		if err != nil {
 			return false, err
 		}

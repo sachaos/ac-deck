@@ -9,10 +9,10 @@ var timeout int
 
 // testCmd represents the test command
 var testCmd = &cobra.Command{
-	Use:   "test DIRECTORY",
-	Short: "Run test",
+	Use:     "test DIRECTORY",
+	Short:   "Run test",
 	Aliases: []string{"t"},
-	Args: cobra.ExactArgs(1),
+	Args:    cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		dir := args[0]
 

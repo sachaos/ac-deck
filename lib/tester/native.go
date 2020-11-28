@@ -38,20 +38,19 @@ func NewNativeTester(dir string, conf *files.Conf) (*NativeTester, error) {
 	return &NativeTester{dir: dir, conf: conf}, nil
 }
 
-func (t *NativeTester) Run(ctx context.Context, index int, example *atcoder.Example) (*Result, error) {
-	result := Result{
-		Log: &bytes.Buffer{},
-		Actual: &bytes.Buffer{},
-	}
+func (t *NativeTester) Run(ctx context.Context, r io.Reader, w io.Writer, ew io.Writer) error {
+	panic("run is not implemented in Native mode")
+}
 
+func (t *NativeTester) Test(ctx context.Context, index int, example *atcoder.Example) (*Result, error) {
 	cmd := strings.Split(t.conf.Environment.Cmd, " ")
 
-	err := runTestOnNative(ctx, cmd, t.dir, example, &result)
+	result, err := runTestOnNative(ctx, cmd, t.dir, example)
 	if err != nil {
 		return nil, err
 	}
 
-	return &result, nil
+	return result, nil
 }
 
 func (t *NativeTester) Clean(ctx context.Context) error {
@@ -75,21 +74,34 @@ func (t *NativeTester) Clean(ctx context.Context) error {
 	return nil
 }
 
-func runTestOnNative(ctx context.Context, args []string, dir string, c *atcoder.Example, r *Result) error {
+func runTestOnNative(ctx context.Context, args []string, dir string, c *atcoder.Example) (*Result, error) {
+	var buf bytes.Buffer
+	var ebuf bytes.Buffer
+
 	cmd := exec.CommandContext(ctx, args[0], args[1:]...)
 	cmd.Dir = dir
 	cmd.Stdin = strings.NewReader(c.In)
-	cmd.Stderr = r.Log
-	cmd.Stdout = r.Actual
+	cmd.Stdout = &buf
+	cmd.Stderr = &ebuf
+
+	r := Result{
+		Actual:   &buf,
+		Log:      &ebuf,
+		ExitCode: 0,
+	}
 
 	err := cmd.Run()
 	if err != nil {
 		io.Copy(os.Stderr, r.Log)
 		io.Copy(os.Stderr, r.Actual)
-		return err
+
+		return nil, err
 	}
+
+	io.Copy(&buf, r.Actual)
+	io.Copy(&ebuf, r.Log)
 
 	r.ExitCode = cmd.ProcessState.ExitCode()
 
-	return nil
+	return &r, nil
 }
