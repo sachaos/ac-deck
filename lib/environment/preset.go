@@ -200,5 +200,20 @@ var Environments = map[string]*Environment{
 		CmdOnDocker: "python -B main.py",
 		DockerImage: "ghcr.io/sachaos/atcoder-python3:v1.0.0",
 	},
+	"rust": {
+		Key:          "rust",
+		Language:     "Rust (1.42.0)",
+		SrcName:      "main.rs",
+		Template:     "internal/rust/main.rs",
+		LanguageCode: "4050",
+
+		BuildCmd: "go build -o ./a.out main.go",
+		Cmd:      "./a.out",
+		CleanCmd: "rm ./a.out",
+
+		DockerImage:      "docker.io/library/rust:1.42.0",
+		BuildCmdOnDocker: "cargo build --release --offline --quiet",
+		CmdOnDocker:      "./a.out",
+	},
 }
 
