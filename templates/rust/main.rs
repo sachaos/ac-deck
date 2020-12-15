@@ -2,9 +2,9 @@
 use proconio::input;
 
 fn main () {
-  input! {
-    N: i32,
-  }
+    input! {
+      N: i32,
+    }
 
-  println!("hello world");
+    println!("hello world");
 }

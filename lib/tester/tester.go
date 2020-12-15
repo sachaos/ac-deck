@@ -26,7 +26,7 @@ type Result struct {
 
 type Tester interface {
 	Run(ctx context.Context, r io.Reader, w io.Writer, ew io.Writer) error
-	Test(ctx context.Context, index int, example *atcoder.Example) (*Result, error)
+	Test(ctx context.Context, example *atcoder.Example) (*Result, error)
 	Clean(ctx context.Context) error
 }
 
@@ -93,7 +93,7 @@ func RunTest(dir string, onContainer bool, timeout int, verbose bool) (bool, err
 	for index, example := range examples {
 		ctx, _ := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Second)
 		start := time.Now()
-		result, err := tester.Test(ctx, index, example)
+		result, err := tester.Test(ctx, example)
 		if err != nil {
 			return false, err
 		}

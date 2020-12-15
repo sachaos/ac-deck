@@ -207,13 +207,16 @@ var Environments = map[string]*Environment{
 		Template:     "internal/rust/main.rs",
 		LanguageCode: "4050",
 
-		BuildCmd: "go build -o ./a.out main.go",
-		Cmd:      "./a.out",
-		CleanCmd: "rm ./a.out",
+		BuildCmd: "cargo build --release --offline --quiet",
+		Cmd:      "./target/release/rust",
+		CleanCmd: "rm ./target/release/rust",
 
-		DockerImage:      "docker.io/library/rust:1.42.0",
+		WorkingDir: "/src",
+		SrcDir: "/src/src",
+
+		DockerImage:      "ghcr.io/sachaos/atcoder-rust",
 		BuildCmdOnDocker: "cargo build --release --offline --quiet",
-		CmdOnDocker:      "./a.out",
+		CmdOnDocker:      "./target/release/rust",
 	},
 }
 

@@ -42,7 +42,7 @@ func (t *NativeTester) Run(ctx context.Context, r io.Reader, w io.Writer, ew io.
 	panic("run is not implemented in Native mode")
 }
 
-func (t *NativeTester) Test(ctx context.Context, index int, example *atcoder.Example) (*Result, error) {
+func (t *NativeTester) Test(ctx context.Context, example *atcoder.Example) (*Result, error) {
 	cmd := strings.Split(t.conf.Environment.Cmd, " ")
 
 	result, err := runTestOnNative(ctx, cmd, t.dir, example)

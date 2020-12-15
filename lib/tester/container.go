@@ -1,15 +1,10 @@
 package tester
 
 import (
+	"archive/tar"
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/sachaos/ac-deck/lib/atcoder"
-	"io"
-	"os"
-	"path"
-	"strings"
-
 	"github.com/docker/cli/cli/streams"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
@@ -17,7 +12,12 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/docker/docker/pkg/jsonmessage"
 	"github.com/docker/docker/pkg/stdcopy"
+	"github.com/sachaos/ac-deck/lib/atcoder"
 	"github.com/sirupsen/logrus"
+	"io"
+	"os"
+	"path"
+	"strings"
 
 	"github.com/sachaos/ac-deck/lib/files"
 )
@@ -71,17 +71,37 @@ func (t *ContainerTester) Run(ctx context.Context, r io.Reader, w io.Writer, ew 
 	return nil
 }
 
-func (t *ContainerTester) Test(ctx context.Context, index int, example *atcoder.Example) (*Result, error) {
+func (t *ContainerTester) Test(ctx context.Context, example *atcoder.Example) (*Result, error) {
+	content := example.In+"\n"
+
 	logrus.Debug("Running ContainerTester.Test")
-	r, err := ExecWithStdin(ctx, t.cli, t.containerId, strings.Split(t.conf.Environment.Cmd, " "), strings.NewReader(example.In + "\n\x04"))
+	logrus.Debug("Copy input file to container")
+	var buf bytes.Buffer
+	tw := tar.NewWriter(&buf)
+	tw.WriteHeader(&tar.Header{
+		Name: "example",
+		Mode: 0666,
+		Size: int64(len(content)),
+	})
+	tw.Write([]byte(content))
+	tw.Close()
+
+	err := t.cli.CopyToContainer(ctx, t.containerId, "/", &buf, types.CopyToContainerOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	logrus.Debug("Run test")
+	cmd := []string{"sh", "-c", fmt.Sprintf("cat /example | %s", t.conf.Environment.Cmd)}
+	r, err := ExecWithStdin(ctx, t.cli, t.containerId, cmd, strings.NewReader(""))
 	if err != nil {
 		return nil, err
 	}
 
 	return &Result{
-		Actual: r.Stdout,
-		Log:    r.Stderr,
-		ExitCode:  r.ExitCode,
+		Actual:   r.Stdout,
+		Log:      r.Stderr,
+		ExitCode: r.ExitCode,
 	}, nil
 }
 
@@ -104,10 +124,10 @@ func startContainer(ctx context.Context, cli *client.Client, conf *files.Conf, d
 		Tty:        true,
 		Cmd:        []string{"/bin/sh"},
 		Image:      conf.Environment.DockerImage,
-		WorkingDir: "/src",
+		WorkingDir: conf.Environment.GetWorkingDir(),
 	}
 	hostConfig := &container.HostConfig{
-		Binds: []string{path.Join(pwd, dir) + ":/src"},
+		Binds: []string{path.Join(pwd, dir) + ":" + conf.Environment.GetSrcDir()},
 	}
 
 	err = PrepareImage(cli, ctx, conf.Environment.DockerImage)
