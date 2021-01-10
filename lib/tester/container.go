@@ -73,7 +73,7 @@ func (t *ContainerTester) Run(ctx context.Context, r io.Reader, w io.Writer, ew 
 
 func (t *ContainerTester) Test(ctx context.Context, index int, example *atcoder.Example) (*Result, error) {
 	logrus.Debug("Running ContainerTester.Test")
-	r, err := ExecWithStdin(ctx, t.cli, t.containerId, strings.Split(t.conf.Environment.Cmd, " "), strings.NewReader(example.In + "\n"))
+	r, err := ExecWithStdin(ctx, t.cli, t.containerId, strings.Split(t.conf.Environment.Cmd, " "), strings.NewReader(example.In + "\n\x04"))
 	if err != nil {
 		return nil, err
 	}
