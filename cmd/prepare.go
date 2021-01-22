@@ -43,12 +43,7 @@ var prepareCmd = &cobra.Command{
 			return err
 		}
 
-		var selector *environment.EnvironmentSelector
-		if contest.LangVer == atcoder.LangOld {
-			selector = environment.DefaultOldEnvironmentSelector
-		} else {
-			selector = environment.DefaultEnvironmentSelector
-		}
+		selector := environment.DefaultEnvironmentSelector
 
 		return preparer.Prepare(contest, ".", selector.Select(language), templatePath)
 	},

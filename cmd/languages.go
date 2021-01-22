@@ -27,21 +27,6 @@ var languagesCmd = &cobra.Command{
 			}
 			w.Render()
 		}
-
-		fmt.Println()
-		fmt.Println("Old Environments")
-
-		{
-			w := tablewriter.NewWriter(os.Stdout)
-			w.SetHeader([]string{"key", "alias", "name", "image", "note"})
-			selector := environment.DefaultOldEnvironmentSelector
-
-			for _, key := range selector.Keys() {
-				env := selector.Select(key)
-				w.Append([]string{env.Key, strings.Join(selector.Aliases(key), ","), env.Language, env.DockerImage, env.Note})
-			}
-			w.Render()
-		}
 	},
 }
 

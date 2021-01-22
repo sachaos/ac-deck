@@ -1,7 +1,6 @@
 package atcoder
 
 const LangNew = "lang"
-const LangOld = "oldLang"
 
 type Contest struct {
 	ID      string

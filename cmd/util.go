@@ -5,5 +5,5 @@ import (
 )
 
 func validateLanguage(lang string) bool {
-	return environment.DefaultEnvironmentSelector.Has(lang) || environment.DefaultOldEnvironmentSelector.Has(lang)
+	return environment.DefaultEnvironmentSelector.Has(lang)
 }

@@ -10,10 +10,8 @@ jobs:
       matrix:
         environment:
           - gcc
-          - gcc-old
           - python2
           - python3
-          - python3-old
           - rust
       fail-fast: false
     name: Build & Push sachaos/atcoder-${{ matrix.environment }} Image

@@ -90,7 +90,7 @@ func ParseLangVersion(r io.Reader) (string, error) {
 	doc.Find("option").Each(func(_ int, selection *goquery.Selection) {
 		val, _ := selection.Attr("value")
 		if val == "3001" {
-			result = LangOld
+			panic("Not supporting old environment")
 		}
 
 		if val == "4001" {

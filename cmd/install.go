@@ -37,21 +37,6 @@ var installCmd = &cobra.Command{
 			}
 		}
 
-		{
-			env := environment.DefaultOldEnvironmentSelector.Select(language)
-			if env != nil {
-				cli, err := client.NewClientWithOpts(client.FromEnv)
-				if err != nil {
-					return err
-				}
-
-				err = tester.PrepareImage(cli, context.Background(), env.DockerImage)
-				if err != nil {
-					return err
-				}
-			}
-		}
-
 		fmt.Println("Preparation completed")
 
 		return nil
