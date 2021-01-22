@@ -110,6 +110,7 @@ $ acd abc153/abc153_a submit --skip-test
 - Python3 (3.8.2)
 - Go (1.14.1)
     - You cannot use gonum, gods now.
+- Rust (1.42.0)
 
 ### Old versions
 
