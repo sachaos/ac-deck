@@ -3,7 +3,7 @@ use proconio::input;
 
 fn main () {
     input! {
-      N: i32,
+        N: i32,
     }
 
     println!("hello world");
