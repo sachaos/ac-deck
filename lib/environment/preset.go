@@ -63,7 +63,7 @@ var Environments = map[string]*Environment{
 		WorkingDir: "/src",
 		SrcDir: "/src/src",
 
-		DockerImage:      "ghcr.io/sachaos/atcoder-rust",
+		DockerImage:      "ghcr.io/sachaos/atcoder-rust:v1.0.0",
 		BuildCmdOnDocker: "cargo build --release --offline --quiet",
 		CmdOnDocker:      "./target/release/rust",
 	},
