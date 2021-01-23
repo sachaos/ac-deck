@@ -19,7 +19,7 @@ var Environments = map[string]*Environment{
 		CleanCmd: "rm ./a.out",
 
 		DockerImage:      "ghcr.io/sachaos/atcoder-gcc:v1.0.0",
-		BuildCmdOnDocker: "g++ -std=gnu++17 -Wall -Wextra -I /opt/boost/boost_1_72_0 -L /opt/boost/boost_1_72_0 -O2 -o a.out main.cpp",
+		BuildCmdOnDocker: "g++ -std=gnu++17 -Wall -Wextra -I /opt/boost/boost_1_72_0 -L /opt/boost/boost_1_72_0 -I /opt/ac-library -O2 -o a.out main.cpp",
 		CmdOnDocker:      "./a.out",
 	},
 	"go": {
