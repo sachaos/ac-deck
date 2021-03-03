@@ -6,36 +6,6 @@ import (
 	"testing"
 )
 
-func TestParseLangVersion(t *testing.T) {
-	{
-		file, err := os.Open("testdata/submit_old.html")
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		version, err := ParseLangVersion(file)
-		if err != nil {
-			t.Error(err)
-		}
-
-		assert.Equal(t, LangOld, version)
-	}
-
-	{
-		file, err := os.Open("testdata/submit_new.html")
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		version, err := ParseLangVersion(file)
-		if err != nil {
-			t.Error(err)
-		}
-
-		assert.Equal(t, LangNew, version)
-	}
-}
-
 func TestParseTaskPage(t *testing.T) {
 	{
 		file, err := os.Open("testdata/abc153_a.html")
