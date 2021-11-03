@@ -15,6 +15,7 @@ import (
 	"github.com/sachaos/ac-deck/lib/atcoder"
 	"github.com/sirupsen/logrus"
 	"io"
+	"io/ioutil"
 	"os"
 	"path"
 	"strings"
@@ -59,14 +60,37 @@ func NewContainerTester(ctx context.Context, cli *client.Client, conf *files.Con
 	}, nil
 }
 
-func (t *ContainerTester) Run(ctx context.Context, r io.Reader, w io.Writer, ew io.Writer) error {
-	result, err := ExecWithStdin(ctx, t.cli, t.containerId, strings.Split(t.conf.Environment.Cmd, " "), r)
+func (t *ContainerTester) Run(ctx context.Context, stdin io.Reader, w io.Writer, ew io.Writer) error {
+	contentBytes, err := ioutil.ReadAll(stdin)
+	if err != nil {
+		return err
+	}
+	content := string(contentBytes) + "\n"
+
+	var buf bytes.Buffer
+	tw := tar.NewWriter(&buf)
+	tw.WriteHeader(&tar.Header{
+		Name: "example",
+		Mode: 0666,
+		Size: int64(len(content)),
+	})
+	tw.Write([]byte(content))
+	tw.Close()
+
+	err = t.cli.CopyToContainer(ctx, t.containerId, "/", &buf, types.CopyToContainerOptions{})
 	if err != nil {
 		return err
 	}
 
-	io.Copy(w, result.Stdout)
-	io.Copy(ew, result.Stderr)
+	logrus.Debug("Run test")
+	cmd := []string{"sh", "-c", fmt.Sprintf("cat /example | %s", t.conf.Environment.Cmd)}
+	r, err := ExecWithStdin(ctx, t.cli, t.containerId, cmd, strings.NewReader(""))
+	if err != nil {
+		return err
+	}
+
+	io.Copy(w, r.Stdout)
+	io.Copy(ew, r.Stderr)
 
 	return nil
 }
@@ -222,6 +246,7 @@ func ExecWithStdin(ctx context.Context, cli *client.Client, name string, cmd []s
 	go func() {
 		logrus.Debug("Sending input data")
 		_, err = io.Copy(res.Conn, stdin)
+		logrus.Debug("Finish sending input data")
 	}()
 
 	select {

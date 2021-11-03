@@ -3,7 +3,7 @@
 BUILD_OPTION=-o acd -ldflags "-X github.com/sachaos/ac-deck/cmd.version=${VERSION}"
 
 prepare:
-	go get github.com/rakyll/statik
+	go install github.com/rakyll/statik@latest
 	go generate
 
 build: prepare
