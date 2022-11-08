@@ -39,7 +39,7 @@ func prepareTemplate(p string) (*template.Template, error) {
 	var err error
 	if split[0] == "internal" {
 		f := templates.Internal
-		file, err = f.Open(strings.TrimPrefix(p, "internal"))
+		file, err = f.Open(p)
 		if err != nil {
 			return nil, fmt.Errorf("internal not found: %w", err)
 		}
