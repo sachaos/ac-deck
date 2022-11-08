@@ -2,11 +2,10 @@ package preparer
 
 import (
 	"fmt"
-	"github.com/rakyll/statik/fs"
 	"github.com/sachaos/ac-deck/lib/atcoder"
 	"github.com/sachaos/ac-deck/lib/environment"
 	"github.com/sachaos/ac-deck/lib/files"
-	_ "github.com/sachaos/ac-deck/statik"
+	"github.com/sachaos/ac-deck/templates"
 	"io"
 	"io/ioutil"
 	"os"
@@ -39,11 +38,7 @@ func prepareTemplate(p string) (*template.Template, error) {
 	var file io.ReadCloser
 	var err error
 	if split[0] == "internal" {
-		f, err := fs.New()
-		if err != nil {
-			return nil, err
-		}
-
+		f := templates.Internal
 		file, err = f.Open(strings.TrimPrefix(p, "internal"))
 		if err != nil {
 			return nil, fmt.Errorf("internal not found: %w", err)
