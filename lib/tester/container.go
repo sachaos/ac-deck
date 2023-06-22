@@ -12,6 +12,7 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/docker/docker/pkg/jsonmessage"
 	"github.com/docker/docker/pkg/stdcopy"
+	v1 "github.com/opencontainers/image-spec/specs-go/v1"
 	"github.com/sachaos/ac-deck/lib/atcoder"
 	"github.com/sirupsen/logrus"
 	"io"
@@ -96,7 +97,7 @@ func (t *ContainerTester) Run(ctx context.Context, stdin io.Reader, w io.Writer,
 }
 
 func (t *ContainerTester) Test(ctx context.Context, example *atcoder.Example) (*Result, error) {
-	content := example.In+"\n"
+	content := example.In + "\n"
 
 	logrus.Debug("Running ContainerTester.Test")
 	logrus.Debug("Copy input file to container")
@@ -160,7 +161,10 @@ func startContainer(ctx context.Context, cli *client.Client, conf *files.Conf, d
 	}
 
 	networkingConfig := &network.NetworkingConfig{}
-	create, err := cli.ContainerCreate(ctx, config, hostConfig, networkingConfig, "")
+	create, err := cli.ContainerCreate(ctx, config, hostConfig, networkingConfig, &v1.Platform{
+		Architecture: "amd64",
+		OS:           "linux",
+	}, "")
 	if err != nil {
 		return "", err
 	}
