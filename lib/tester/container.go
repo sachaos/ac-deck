@@ -4,6 +4,8 @@ import (
 	"archive/tar"
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"github.com/docker/cli/cli/streams"
 	"github.com/docker/docker/api/types"
@@ -97,14 +99,19 @@ func (t *ContainerTester) Run(ctx context.Context, stdin io.Reader, w io.Writer,
 }
 
 func (t *ContainerTester) Test(ctx context.Context, example *atcoder.Example) (*Result, error) {
+	sum := sha256.Sum256([]byte(example.In))
+	sumStr := hex.EncodeToString(sum[:])
+	name := fmt.Sprintf("example-%s", sumStr)
+
 	content := example.In + "\n"
 
 	logrus.Debug("Running ContainerTester.Test")
 	logrus.Debug("Copy input file to container")
+	logrus.Debug("Input file: %s", content)
 	var buf bytes.Buffer
 	tw := tar.NewWriter(&buf)
 	tw.WriteHeader(&tar.Header{
-		Name: "example",
+		Name: name,
 		Mode: 0666,
 		Size: int64(len(content)),
 	})
@@ -117,7 +124,7 @@ func (t *ContainerTester) Test(ctx context.Context, example *atcoder.Example) (*
 	}
 
 	logrus.Debug("Run test")
-	cmd := []string{"sh", "-c", fmt.Sprintf("cat /example | %s", t.conf.Environment.Cmd)}
+	cmd := []string{"sh", "-c", fmt.Sprintf("cat /%s | %s", name, t.conf.Environment.Cmd)}
 	r, err := ExecWithStdin(ctx, t.cli, t.containerId, cmd, strings.NewReader(""))
 	if err != nil {
 		return nil, err
